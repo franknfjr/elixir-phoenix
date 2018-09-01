@@ -1,1 +1,1 @@
-# introdução ao Elixir
+# Visão detalhada de Channels: Criando uma aplicação Chat
