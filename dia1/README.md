@@ -36,7 +36,7 @@ Dia 1:
     * Atributo de Módulo
 
 
-##Conceitos de Escalabilidade
+## Conceitos de Escalabilidade
     
     Escalabilidade é basicamente a capacidade de expanção sem aumento elevado do custo. Em engenharia de software é uma caracteristica desejavel em todo o sistema, que indica sua capacidade de manipular uma porção crescente de trabalho de forma uniforme, ou estar preparado para crescer.
     Em elixir todo o código é executado dentro de threads de execução leves (chamados processos) que são isolados e trocam informações por meio de mensagens
@@ -54,7 +54,7 @@ Dia 1:
     {:msg, contents} -> IO.puts contents
     end
     ```
-##Tolerança a falhas
+## Tolerança a falhas
 
     Em software as falhas são decorrentes de desenvolvimentos de bugs e causados por humanos. As mesma são tratadas com basicamente com detectação e recuperação, e tecnicas de tolerancia a falhas.
 
@@ -68,7 +68,7 @@ Dia 1:
 
     Supervisor.start_link(children, strategy: :one_for_one)
     ``` 
-##Linguagem funcional
+## Linguagem funcional
 
     É um paradigma de programação onde não é tido para ao código com ele deve fazer, quando e como. Não será desenvolvido passo a passo, mas sim como uma sequência de funções e passos, as quais de maneira composta iram resolver problemas.
 
@@ -81,9 +81,9 @@ Dia 1:
 
     O Elixir depende muito desses recursos para garantir que seu software esteja funcionando sob as restrições esperadas. E quando não é, não se preocupe, os supervisores estão de prontidão.
     
-##Tipos básicos
+## Tipos básicos
 
-###Booleans
+### Booleans
 
     Elixir apresenta três maneiras de expressões booleans: `true`, `false` e `nil`(avaliado como false em contextos booleanos).
 
@@ -114,7 +114,7 @@ Dia 1:
     iex(5)> is_integer(1.5)
     false
     ```
-##Atoms
+## Atoms
 
     Um Átomo é uma constante cujo o nome é seu valor. em Elixir ele é representado por ":" (dois pontos) em seguida um texto. Geralmente atoms são mais comuns para sinalizar alguma mensagem como de erro ou sucesso.
 
@@ -139,7 +139,7 @@ Dia 1:
     iex> is_boolean(:false)
     true
     ```
-##String
+## String
 
     São caracteres UTF-8 envolvidas por aspas duplas. Além disso elas tem escritas diretamente com quebras de linha, aceitam heredoc (documentação entre caracteres de abertura e fechamento) e interpolação — que vai além da interpolação comum porque permite realizar operações diretamente dentro dela. 
 
@@ -174,7 +174,7 @@ Dia 1:
     iex(2)> String.length("Curso elixir") 
     12
     ```
-##Lista
+## Lista
 
     Listas é um tipo de coleção de elementos e podem conter diversos outros tipos dentro dela. Como ter uma listas de números, atoms e string. A mesma não deve ser comparada com array de outras linguagens, pois a lista pode ser formada por head (cabeça) e tail (calda). Onde na head contem o valor e tail é a lista inteira. Por ser implementada dessa forma pode percorrida facilmente.
 
