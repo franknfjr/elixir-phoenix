@@ -1,103 +1,96 @@
 # introdução ao Elixir
 
-Dia 1:
+* Introdução ao Elixir:
+  * Conceitos de Escalabilidade
+  * Tolerância a falha
+  * Linguagem funcional
 
-* Introdução ao Elixir: 
-    * Conceitos de Escalabilidade
-    * Tolerância a falha
-    * Linguagem funcional
-
-* Tipos básico: 
-    * Booleans
-    * Atoms
-    * Strings
-    * Listas
-    * Maps
-    * Tuplas
-    * Palavra-chave
+* Tipos básico:
+  * Booleans
+  * Atoms
+  * Strings
+  * Listas
+  * Maps
+  * Tuplas
+  * Palavra-chave
 
 * Pattern Matching:
-    * Atribuição
-    * Ignorando valores
-    * Matches complexos
-    * Operador Pipe
-    
+  * Atribuição
+  * Ignorando valores
+  * Matches complexos
+  * Operador Pipe
 
-* Função Anônima: 
-    * Funções e Pattern Matching
-    * Case, cond e if
-    * Funções retornando funções 
-    * Função recebendo função como argumento
+* Função Anônima:
+  * Funções e Pattern Matching
+  * Case, cond e if
+  * Funções retornando funções
+  * Função recebendo função como argumento
 
-* Modulo e Função Nomeada: 
-    * Função do end
-    * Funções Privada
-    * Modulo 
-    * Atributo de Módulo
-
+* Modulo e Função Nomeada:
+  * Função do end
+  * Funções Privada
+  * Modulo
+  * Atributo de Módulo
 
 ## Conceitos de Escalabilidade
-    
-    Escalabilidade é basicamente a capacidade de expanção sem aumento elevado do custo.
-    Em engenharia de software é uma caracteristica desejavel em todo o sistema, que
-    indica sua capacidade de manipular uma porção crescente de trabalho de forma uniforme,
-    ou estar preparado para crescer.
-    
-    Em elixir todo o código é executado dentro de threads de execução leves (chamados 
-    processos) que são isolados e trocam informações por meio de mensagens.
-    
-    ```elixir
-    current_process = self()
 
-    # Spawn an Elixir process (not an operating system one!)
-    spawn_link(fn ->
-    send current_process, {:msg, "hello world"}
-    end)
+Escalabilidade é basicamente a capacidade de expanção sem aumento elevado do custo. Em engenharia de software é uma caracteristica desejavel em todo o sistema, que indica sua capacidade de manipular uma porção crescente de trabalho de forma uniforme, ou estar preparado para crescer.
+Em elixir todo o código é executado dentro de threads de execução leves (chamados processos) que são isolados e trocam informações por meio de mensagens.
 
-    # Block until the message is received
-    receive do
-    {:msg, contents} -> IO.puts contents
-    end
-    ```
+```elixir
+
+current_process = self()
+
+# Spawn an Elixir process (not an operating system one!)
+spawn_link(fn ->
+send current_process, {:msg, "hello world"}
+end)
+
+# Block until the message is received
+receive do
+{:msg, contents} -> IO.puts contents
+end
+```
+
 ## Tolerança a falhas
 
-    Em software as falhas são decorrentes de desenvolvimentos de bugs e causados por
-    humanos. As mesma são tratadas com basicamente com detectação e recuperação, e
-    tecnicas de tolerancia a falhas.
+Em software as falhas são decorrentes de desenvolvimentos de bugs e causados por humanos. As mesma são tratadas com basicamente com detectação e recuperação, e tecnicas de tolerancia a falhas.
 
-    Para lidar com falhas, o Elixir fornece supervisores que descrevem como reiniciar partes de seu sistema quando as coisas dão errado, voltando a um estado inicial conhecido que é garantido que funcione.
-    
-    children = [
-    TCP.Pool,
-    {TCP.Acceptor, port: 4040}
-    ]
+Para lidar com falhas, o Elixir fornece supervisores que descrevem como reiniciar partes de seu sistema quando as coisas dão errado, voltando a um estado inicial conhecido que é garantido que funcione.
 
-    Supervisor.start_link(children, strategy: :one_for_one)
-    
+```elixir
+
+children = [
+TCP.Pool,
+{TCP.Acceptor, port: 4040}
+]
+Supervisor.start_link(children, strategy: :one_for_one)
+```
+
 ## Linguagem funcional
 
-    É um paradigma de programação onde não é tido para ao código com ele deve fazer,
-    quando e como. Não será desenvolvido passo a passo, mas sim como uma sequência de
-    funções e passos, as quais de maneira composta iram resolver problemas.
+É um paradigma de programação onde não é tido para ao código com ele deve fazer,
+quando e como. Não será desenvolvido passo a passo, mas sim como uma sequência de
+funções e passos, as quais de maneira composta iram resolver problemas.
 
-    A programação funcional promove um estilo de codificação que ajuda os desenvolvedores
-    a escrever códigos curtos, rápidos e de fácil manutenção. Por exemplo, a
-    correspondência de padrões permite que os desenvolvedores desorganizem dados
-    facilmente e acessem seu conteúdo.
+A programação funcional promove um estilo de codificação que ajuda os desenvolvedores a escrever códigos curtos, rápidos e de fácil manutenção. Por exemplo, a correspondência de padrões permite que os desenvolvedores desorganizem dados facilmente e acessem seu conteúdo.
 
-    ```elixir
-    %User{name: name, age: age} = User.get("John Doe")
-    name #=> "John Doe"  
-    ```
+```elixir
 
-    O Elixir depende muito desses recursos para garantir que seu software esteja funcionando sob as restrições esperadas. E quando não é, não se preocupe, os supervisores estão de prontidão.
-    
+%User{name: name, age: age} = User.get("John Doe")
+name #=> "John Doe"  
+```
+
+O Elixir depende muito desses recursos para garantir que seu software esteja funcionando 
+sob as restrições esperadas. E quando não é, não se preocupe, os supervisores estão de 
+prontidão.
+
 ## Tipos básicos
 
 ### Booleans
 
-    Elixir apresenta três maneiras de expressões booleans: `true`, `false` e `nil`
-    avaliado como false em contextos booleanos).
+Elixir apresenta três maneiras de expressões booleans: `true`, `false` e `nil`
+avaliado como false em contextos booleanos).
 
     ```elixir
     iex> true
