@@ -69,9 +69,7 @@ Supervisor.start_link(children, strategy: :one_for_one)
 
 ## Linguagem funcional
 
-É um paradigma de programação onde não é tido para ao código com ele deve fazer,
-quando e como. Não será desenvolvido passo a passo, mas sim como uma sequência de
-funções e passos, as quais de maneira composta iram resolver problemas.
+É um paradigma de programação onde não é tido para ao código com ele deve fazer, quando e como. Não será desenvolvido passo a passo, mas sim como uma sequência de funções e passos, as quais de maneira composta iram resolver problemas.
 
 A programação funcional promove um estilo de codificação que ajuda os desenvolvedores a escrever códigos curtos, rápidos e de fácil manutenção. Por exemplo, a correspondência de padrões permite que os desenvolvedores desorganizem dados facilmente e acessem seu conteúdo.
 
@@ -81,121 +79,126 @@ A programação funcional promove um estilo de codificação que ajuda os desenv
 name #=> "John Doe"  
 ```
 
-O Elixir depende muito desses recursos para garantir que seu software esteja funcionando 
-sob as restrições esperadas. E quando não é, não se preocupe, os supervisores estão de 
-prontidão.
+O Elixir depende muito desses recursos para garantir que seu software esteja funcionando sob as restrições esperadas. E quando não é, não se preocupe, os supervisores estão de prontidão.
 
 ## Tipos básicos
 
 ### Booleans
 
-Elixir apresenta três maneiras de expressões booleans: `true`, `false` e `nil`
-avaliado como false em contextos booleanos).
+Elixir apresenta três maneiras de expressões booleans: `true`, `false` e `nil` avaliado como false em contextos booleanos).
 
-    ```elixir
-    iex> true
-    true
+```elixir
 
-    iex> false
-    false
+iex> true
+true
 
-    iex> nil
-    nil
-    ```
+iex> false
+false
 
-    O Elixir fornece várias funções de predicado para verificar um tipo de valor. Por
-    exemplo, a is_boolean/1função pode ser usada para verificar se um valor é booleano ou
-    não.
+iex> nil
+nil
+```
 
-    ```elixir
-    iex> is_boolean(true)
-    true
-    iex> is_boolean(1)
-    false
-    ```
-    Você também pode usar is_integer/1, is_float/1ou is_number/1verificar, 
-    respectivamente, se um argumento é um inteiro, um float ou qualquer um.
+O Elixir fornece várias funções de predicado para verificar um tipo de valor. Por exemplo,a is_boolean/1função pode ser usada para verificar se um valor é booleano ou não.
 
-    ```elixir
-    iex(4)> is_integer(1)
-    true
-    iex(5)> is_integer(1.5)
-    false
-    ```
+```elixir
+
+iex> is_boolean(true)
+true
+
+iex> is_boolean(1)
+false
+```
+
+Você também pode usar is_integer/1, is_float/1ou is_number/1verificar, respectivamente, se um argumento é um inteiro, um float ou qualquer um.
+
+```elixir
+
+iex(4)> is_integer(1)
+true
+iex(5)> is_integer(1.5)
+false
+```
+
 ## Atoms
 
-    Um Átomo é uma constante cujo o nome é seu valor. em Elixir ele é representado por
-    ":" (dois pontos) em seguida um texto. Geralmente atoms são mais comuns para
-    sinalizar alguma mensagem como de erro ou sucesso.
+Um Átomo é uma constante cujo o nome é seu valor. em Elixir ele é representado por ":" (dois pontos) em seguida um texto. Geralmente atoms são mais comuns para sinalizar alguma mensagem como de erro ou sucesso.
 
-    ```elixir
-    iex> :ok
-    :ok
-    
-    iex> :error404
-    :error404
+```elixir
 
-    iex> :ok == :error 
-    false
-    ```
-    
-    Os booleanos truee falsesão, na verdade, átomos.
+iex> :ok
+:ok
 
-    ```elixir
-    iex> true == :true
-    true
-    iex> is_atom(false)
-    true
-    iex> is_boolean(:false)
-    true
-    ```
+iex> :error404
+:error404
+
+iex> :ok == :error
+false
+```
+
+Os booleanos truee falsesão, na verdade, átomos.
+
+```elixir
+
+iex> true == :true
+true
+
+iex> is_atom(false)
+true
+
+iex> is_boolean(:false)
+true
+```
+
 ## String
 
-    São caracteres UTF-8 envolvidas por aspas duplas. Além disso elas tem escritas 
-    diretamente com quebras de linha, aceitam heredoc (documentação entre caracteres de 
-    abertura e fechamento) e interpolação — que vai além da interpolação comum porque 
-    permite realizar operações diretamente dentro dela. 
+São caracteres UTF-8 envolvidas por aspas duplas. Além disso elas tem escritas diretamente com quebras de linha, aceitam heredoc (documentação entre caracteres de abertura e fechamento) e interpolação — que vai além da interpolação comum porque permite realizar operações diretamente dentro dela.
 
-    ```elixir
-    iex(1)> "Livro de Elixir"
-    "Livro de Elixir"
-    iex(2)> "Livro
-    ...(2)> de Elixir"
-    "Livro\nde Elixir"
-    iex(3)> IO.puts("Livro de \nElixir")
-    Livro de
-    Elixir
-    :ok
-    iex(4)> a = "Elixir"
-    "Elixir"
-    iex(5)> "Livro de #{a}"
-    "Livro de Elixir"
-    iex(6)> "2 + 2 é igual a #{2 + 2}"
-    "2 + 2 é igual a 4 "
-    ```
+```elixir
 
-    Algumas função reverse do módulo String , com o nome bem sugestivo, pode inverter 
-    seus caracteres.
+iex(1)> "Curso de Elixir e Phoenix"
+"Curso de Elixir e Phoenix"
 
-    ```elixir
-    iex(1)> String.reverse("Curso elixir")
-    "rixile osruC"  
-    ```
+iex(2)> "Cruso de Elixir
+...(2)> de Phoenix"
+"Curso de Elixir\ne Phoenix"
 
-    A função length pode nos dar a quantidade de caracteres ou tamanho da string.
+iex(3)> IO.puts("Curso de Elixir\ne Phoenix")
+Curso de Elixir
+e Phoenix
+:ok
 
-    ```elixir
-    iex(2)> String.length("Curso elixir") 
-    12
-    ```
+iex(4)> a = "Elixir e Phoenix"
+"Elixir e Phoenix"
+
+iex(5)> "Curso de #{a}"
+"Curso de Elixir e Phoenix"
+
+iex(6)> "2 + 2 é igual a #{2 + 2}"
+"2 + 2 é igual a 4 "
+```
+
+Algumas função reverse do módulo String , com o nome bem sugestivo, pode inverter seus caracteres.
+
+```elixir
+
+iex(1)> String.reverse("Curso elixir")
+"rixile osruC"  
+```
+
+A função length pode nos dar a quantidade de caracteres ou tamanho da string.
+
+```elixir
+
+iex(2)> String.length("Curso elixir")
+12
+```
+
 ## Lista
 
-    Listas é um tipo de coleção de elementos e podem conter diversos outros tipos dentro 
-    dela. Como ter uma listas de números, atoms e string. A mesma não deve ser comparada 
-    com array de outras linguagens, pois a lista pode ser formada por head (cabeça) e 
-    tail (calda). Onde na head contem o valor e tail é a lista inteira. Por ser 
-    implementada dessa forma pode percorrida facilmente.
+Listas é um tipo de coleção de elementos e podem conter diversos outros tipos dentro dela. Como ter uma listas de números, atoms e string. A mesma não deve ser comparada    com array de outras linguagens, pois a lista pode ser formada por head (cabeça) e tail(calda). Onde na head contem o valor e tail é a lista inteira. Por ser implementada dessa forma pode percorrida facilmente.
 
-    ```elixir
-    ["Livro", 2, 1.5, true, nil, :ok]
-    ```
+```elixir
+
+["Curso", 2, 1.5, true, nil, :ok]
+```
