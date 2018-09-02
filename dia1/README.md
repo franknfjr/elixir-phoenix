@@ -38,8 +38,13 @@ Dia 1:
 
 ## Conceitos de Escalabilidade
     
-    Escalabilidade é basicamente a capacidade de expanção sem aumento elevado do custo. Em engenharia de software é uma caracteristica desejavel em todo o sistema, que indica sua capacidade de manipular uma porção crescente de trabalho de forma uniforme, ou estar preparado para crescer.
-    Em elixir todo o código é executado dentro de threads de execução leves (chamados processos) que são isolados e trocam informações por meio de mensagens
+    Escalabilidade é basicamente a capacidade de expanção sem aumento elevado do custo.
+    Em engenharia de software é uma caracteristica desejavel em todo o sistema, que
+    indica sua capacidade de manipular uma porção crescente de trabalho de forma uniforme,
+    ou estar preparado para crescer.
+    
+    Em elixir todo o código é executado dentro de threads de execução leves (chamados 
+    processos) que são isolados e trocam informações por meio de mensagens.
     
     ```elixir
     current_process = self()
@@ -56,23 +61,29 @@ Dia 1:
     ```
 ## Tolerança a falhas
 
-    Em software as falhas são decorrentes de desenvolvimentos de bugs e causados por humanos. As mesma são tratadas com basicamente com detectação e recuperação, e tecnicas de tolerancia a falhas.
+    Em software as falhas são decorrentes de desenvolvimentos de bugs e causados por
+    humanos. As mesma são tratadas com basicamente com detectação e recuperação, e
+    tecnicas de tolerancia a falhas.
 
     Para lidar com falhas, o Elixir fornece supervisores que descrevem como reiniciar partes de seu sistema quando as coisas dão errado, voltando a um estado inicial conhecido que é garantido que funcione.
-
-    ```elixir
+    
     children = [
     TCP.Pool,
     {TCP.Acceptor, port: 4040}
     ]
 
     Supervisor.start_link(children, strategy: :one_for_one)
-    ``` 
+    
 ## Linguagem funcional
 
-    É um paradigma de programação onde não é tido para ao código com ele deve fazer, quando e como. Não será desenvolvido passo a passo, mas sim como uma sequência de funções e passos, as quais de maneira composta iram resolver problemas.
+    É um paradigma de programação onde não é tido para ao código com ele deve fazer,
+    quando e como. Não será desenvolvido passo a passo, mas sim como uma sequência de
+    funções e passos, as quais de maneira composta iram resolver problemas.
 
-    A programação funcional promove um estilo de codificação que ajuda os desenvolvedores a escrever códigos curtos, rápidos e de fácil manutenção. Por exemplo, a correspondência de padrões permite que os desenvolvedores desorganizem dados facilmente e acessem seu conteúdo.
+    A programação funcional promove um estilo de codificação que ajuda os desenvolvedores
+    a escrever códigos curtos, rápidos e de fácil manutenção. Por exemplo, a
+    correspondência de padrões permite que os desenvolvedores desorganizem dados
+    facilmente e acessem seu conteúdo.
 
     ```elixir
     %User{name: name, age: age} = User.get("John Doe")
@@ -85,7 +96,8 @@ Dia 1:
 
 ### Booleans
 
-    Elixir apresenta três maneiras de expressões booleans: `true`, `false` e `nil`(avaliado como false em contextos booleanos).
+    Elixir apresenta três maneiras de expressões booleans: `true`, `false` e `nil`
+    avaliado como false em contextos booleanos).
 
     ```elixir
     iex> true
@@ -98,7 +110,9 @@ Dia 1:
     nil
     ```
 
-    O Elixir fornece várias funções de predicado para verificar um tipo de valor. Por exemplo, a is_boolean/1função pode ser usada para verificar se um valor é booleano ou não.
+    O Elixir fornece várias funções de predicado para verificar um tipo de valor. Por
+    exemplo, a is_boolean/1função pode ser usada para verificar se um valor é booleano ou
+    não.
 
     ```elixir
     iex> is_boolean(true)
@@ -106,7 +120,8 @@ Dia 1:
     iex> is_boolean(1)
     false
     ```
-    Você também pode usar is_integer/1, is_float/1ou is_number/1verificar, respectivamente, se um argumento é um inteiro, um float ou qualquer um.
+    Você também pode usar is_integer/1, is_float/1ou is_number/1verificar, 
+    respectivamente, se um argumento é um inteiro, um float ou qualquer um.
 
     ```elixir
     iex(4)> is_integer(1)
@@ -116,7 +131,9 @@ Dia 1:
     ```
 ## Atoms
 
-    Um Átomo é uma constante cujo o nome é seu valor. em Elixir ele é representado por ":" (dois pontos) em seguida um texto. Geralmente atoms são mais comuns para sinalizar alguma mensagem como de erro ou sucesso.
+    Um Átomo é uma constante cujo o nome é seu valor. em Elixir ele é representado por
+    ":" (dois pontos) em seguida um texto. Geralmente atoms são mais comuns para
+    sinalizar alguma mensagem como de erro ou sucesso.
 
     ```elixir
     iex> :ok
@@ -141,7 +158,10 @@ Dia 1:
     ```
 ## String
 
-    São caracteres UTF-8 envolvidas por aspas duplas. Além disso elas tem escritas diretamente com quebras de linha, aceitam heredoc (documentação entre caracteres de abertura e fechamento) e interpolação — que vai além da interpolação comum porque permite realizar operações diretamente dentro dela. 
+    São caracteres UTF-8 envolvidas por aspas duplas. Além disso elas tem escritas 
+    diretamente com quebras de linha, aceitam heredoc (documentação entre caracteres de 
+    abertura e fechamento) e interpolação — que vai além da interpolação comum porque 
+    permite realizar operações diretamente dentro dela. 
 
     ```elixir
     iex(1)> "Livro de Elixir"
@@ -161,7 +181,8 @@ Dia 1:
     "2 + 2 é igual a 4 "
     ```
 
-    Algumas função reverse do módulo String , com o nome bem sugestivo, pode inverter seus caracteres.
+    Algumas função reverse do módulo String , com o nome bem sugestivo, pode inverter 
+    seus caracteres.
 
     ```elixir
     iex(1)> String.reverse("Curso elixir")
@@ -176,22 +197,12 @@ Dia 1:
     ```
 ## Lista
 
-    Listas é um tipo de coleção de elementos e podem conter diversos outros tipos dentro dela. Como ter uma listas de números, atoms e string. A mesma não deve ser comparada com array de outras linguagens, pois a lista pode ser formada por head (cabeça) e tail (calda). Onde na head contem o valor e tail é a lista inteira. Por ser implementada dessa forma pode percorrida facilmente.
+    Listas é um tipo de coleção de elementos e podem conter diversos outros tipos dentro 
+    dela. Como ter uma listas de números, atoms e string. A mesma não deve ser comparada 
+    com array de outras linguagens, pois a lista pode ser formada por head (cabeça) e 
+    tail (calda). Onde na head contem o valor e tail é a lista inteira. Por ser 
+    implementada dessa forma pode percorrida facilmente.
 
     ```elixir
     ["Livro", 2, 1.5, true, nil, :ok]
     ```
-
-
-
-
-
-    
-
-
-
-
-
-
-
-
