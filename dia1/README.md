@@ -138,7 +138,7 @@ iex> :ok == :error
 false
 ```
 
-Os booleanos truee falsesão, na verdade, átomos.
+Os booleanos truee false são, na verdade, atoms.
 
 ```elixir
 
