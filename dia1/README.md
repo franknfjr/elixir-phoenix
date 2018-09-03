@@ -83,6 +83,8 @@ O Elixir depende muito desses recursos para garantir que seu software esteja fun
 
 ## Tipos básicos
 
+Em Elixir como em outras linguagens existes tipos como númericos, booleanos e coleções, mas ele trás alguns extras como atoms, binários e funções. É isso, funçãos também são tipos em elixir.
+
 ### Booleans
 
 Elixir apresenta três maneiras de expressões booleans: `true`, `false` e `nil` avaliado como false em contextos booleanos).
@@ -122,7 +124,7 @@ false
 
 ## Atoms
 
-Um Átomo é uma constante cujo o nome é seu valor. em Elixir ele é representado por ":" (dois pontos) em seguida um texto. Geralmente atoms são mais comuns para sinalizar alguma mensagem como de erro ou sucesso.
+Um Átomo é uma constante cujo o nome é seu valor. em Elixir ele é representado por `:` (dois pontos) em seguida um texto. Geralmente atoms são mais comuns para sinalizar alguma mensagem como de erro ou sucesso.
 
 ```elixir
 
@@ -148,6 +150,16 @@ true
 
 iex> is_boolean(:false)
 true
+```
+
+Agumas funções para lidar com atoms.
+
+```elixir
+iex(1)> Atom.to_string(:curso)
+"curso"
+
+iex(2)> String.to_atom("Curso")
+:Curso
 ```
 
 ## String
@@ -200,5 +212,108 @@ Listas é um tipo de coleção de elementos e podem conter diversos outros tipos
 
 ```elixir
 
-["Curso", 2, 1.5, true, nil, :ok]
+iex(1)> ["Curso", 1, 1.5, true, nil, :ok]
+["Curso", 1, 1.5, true, nil, :ok]
+```
+
+Em elixir podemos fazer concatenação de lista com a função `++/2`.
+
+```elixir
+
+iex(1)> [2,4,5,6] ++ [:ok, true, "Elixir"]
+[2, 4, 5, 6, :ok, true, "Elixir"]
+
+iex(2)> lista = [1,3,7,8]
+[1, 3, 7, 8]
+
+iex(3)> nova_lista = [2,4,5,6 | lista] |> Enum.sort
+[1, 2, 3, 4, 5, 6, 7, 8]
+```
+
+Além de somar podemos subtrair com a função `--/2`.
+
+```elixir
+
+iex(1)> [2,4,6,8,10] -- [2,10]
+[4, 6, 8]
+
+iex(3)> nova_lista = [1,2,3,4,5,6,7,8,9] -- lista
+[4, 5, 6, 7, 8, 9]
+```
+
+Lembra que uma lista tem head (cabeça) e tail (calda), existe as funções hd/1 e tl/1, para pega-las.
+
+```elixir
+
+iex(4)> hd([2,4,6,8,10])
+
+iex(5)> tl([2,4,6,8,10])
+[4, 6, 8, 10]
+```
+
+## Map
+
+O `map` no elixir é uma estrutura de valor-chave, para criar um usa a sintaxe `%{}`. Seus valores podem ser acessado através das suas chaves.
+
+```elixir
+
+iex(1)> mapa = %{"chave1" => 1, :chave2 => "curso", :chave3 => "Phoenix"}
+%{:chave2 => "curso", :chave3 => "Phoenix", "chave1" => 1}
+
+iex(2)> mapa1 = %{chave1: 1, chave2: 2, chave3: "Elixir"}
+%{chave1: 1, chave2: 2, chave3: "Elixir"}
+
+iex(3)> mapa2 = %{"mesmaChave" => 1, "mesmaChave" => "Curso"}
+%{"mesmaChave" => "Curso"}
+```
+
+Para acessar os valores do mapa usamos `mapa[chave]`, caso nossa chave seja uma atom podemos acessar da seguinte forma `mapa.chave`.
+
+```elixir
+
+iex(4)> mapa["chave1"]
+1
+
+iex(5)> mapa.chave2
+"curso"
+
+iex(6)> mapa.chave3
+"Phoenix"
+
+iex(7)> mapa1[:chave1]
+1
+
+iex(8)> mapa1[:chave2]
+2
+
+iex(9)> mapa1[:chave3]
+"Elixir"
+```
+
+## Tuplas
+
+Uma estrutura parecidas com a lista, elas armazenam qualquer valores dentro delas. Sua sintaxe é `{}`.
+Tem uma vantagem em relação a lista quando acessamos elementos idividuais, mas crescer e adcionar mais elementos com o tempo pode se tornar custoso.
+
+```elixir
+
+iex(11)> {1, "Curso", "Phoenix", true, :ok, [1,2,3]}
+{1, "Curso", "Phoenix", true, :ok, [1, 2, 3]}
+```
+
+Elixir tem funções diversas funções para trabalhar com tuplas, mas irei mostrar duas delas, a tuple_size/1 que acessa o tamanho da tupla, a elem/2 que nos dá a possibilidade de acessar seus elementos pelo indice e put_elem/3 que permite atualizar elemento.
+
+```elixir
+
+iex(14)> tuple_size tupla
+6
+iex(15)> elem tupla, 4
+:ok
+iex(16)> elem tupla, 0
+1
+
+iex(1)> tupla = {:frank, 22}
+{:frank, 22}  
+iex(2)> put_elem tupla, 1, 23
+{:frank, 23}
 ```
