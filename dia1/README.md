@@ -317,3 +317,22 @@ iex(1)> tupla = {:frank, 22}
 iex(2)> put_elem tupla, 1, 23
 {:frank, 23}
 ```
+
+## Palavra-chave
+
+Essa é uma lista especial composta por dois elementos, onde o primeiro é um atom. As palavras-chaves compartilham o desempenho da lista e geralmente são usadas para passar alternativas a funções.
+
+```elixir
+
+iex(1)> [Curso: "Phoenix", Elixir: "linguagem"]
+[Curso: "Phoenix", "Elixir": "linguagem"]
+
+iex(2)> [{:Curso, "Phoenix"}, {:Elixir, "linguagem"}]
+[Curso: "Phoenix", "Elixir": "linguagem"]
+```
+
+Existem três principais relevancias da palavra-chave ou lista de palavra-chave:
+
+* As chaves são atoms;
+* Elas estão ordenadas;
+* e não são unicas;
