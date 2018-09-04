@@ -317,3 +317,6 @@ iex(1)> tupla = {:frank, 22}
 iex(2)> put_elem tupla, 1, 23
 {:frank, 23}
 ```
+
+## Pattern Matching
+
