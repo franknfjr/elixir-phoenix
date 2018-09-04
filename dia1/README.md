@@ -320,3 +320,4 @@ iex(2)> put_elem tupla, 1, 23
 
 ## Pattern Matching
 
+Tem como funcionalidade desmontar estruturas complexas em estruturas mais simples. O operador `=` em elixir é na verdade o operador match, quando temos `a = 10` lei-se `a match 10` ou `a casa com 10`, quando usamos ele a expressão se torna   
