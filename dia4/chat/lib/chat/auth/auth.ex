@@ -13,6 +13,10 @@ defmodule Chat.Auth do
     end
   end
 
+  def register(params) do
+    User.registration_changeset(%User{}, params) |> Repo.insert()
+  end
+
   def current_user(conn) do
     user_id = Plug.Conn.get_session(conn, :current_user_id)
     if user_id, do: Repo.get(User, user_id)
