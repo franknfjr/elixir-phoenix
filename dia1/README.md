@@ -559,3 +559,17 @@ iex> unless 1 == 2 do
 ...> end
 "OK"
 ```
+
+### Cond
+
+Essa macro da a possibilidade de encontrar a primeira condição valida no meio de várias condições.
+
+```elixir
+
+iex(6)> cond do
+...(6)> 2 + 2 == 5 -> "Isso não é verdade"
+...(6)> 2 + 2 == 6 -> "Isso também não é verdade"
+...(6)> 2 + 2 == 4 -> "Eeeee é verdade!"
+...(6)> end
+"Eeeee é verdade!"
+``` 
