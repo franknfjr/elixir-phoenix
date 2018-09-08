@@ -444,9 +444,9 @@ Some as opções que funcionaram e de a resposta.
 
 ## Função Anônima
 
-Como o `Elixir` é uma linguagem funcional, não é de se admirar que uma função é um tipo básico. A função anônima é uma tipo de função tão específica e autoexplicativa que não é necessário criar um nome.
+Como o `Elixir` é uma linguagem funcional, não é de se admirar que uma função é um tipo básico. A função anônima é um tipo de função tão específica e auto explicativa que não é necessário criar um nome. 
 
-Para criar uma ela precisa usar a palavra-chave começa com `fn`, acrescenta os argumentos desejados, em seguida `->` seta e corpo da função e para finalizar `end`.
+Para criar uma precisa usar a palavra-chave `fn` para dar inicio, acrescentar os argumentos desejados, em seguida seta `->` contendo o corpo da função e para finalizar `end`.
 
 ```elixir
 
@@ -454,9 +454,23 @@ iex(22)> soma = fn (n1, n2) -> n1 + n2 end
 #Function<12.99386804/2 in :erl_eval.expr/5>
 iex(23)> soma.(3,4)
 7
-iex(24)>
+
+iex(1)> curso = fn -> IO.puts "Elixir" end
+#Function<20.99386804/0 in :erl_eval.expr/5>
+iex(2)> curso.()
+Elixir
+:ok
+iex(3)> f1 = fn a, b -> a * b end 
+#Function<12.99386804/2 in :erl_eval.expr/5>
+iex(4)> f1.(5,3)
+15
+
 ```
 
-Diferente as funções nomeadas que veremos a seguir, para usarmos uma função anônima temos que usar o ponto `.`  e passar os parâmetros entre parenteses `()`. A mesma é ligada pelo macth a uma variável que será utilizada em algum momento.
+Diferentes as funções nomeadas que veremos a seguir, para usarmos uma função anônima têm que usar o ponto `.` e passar os parâmetros entre parênteses `()`. A mesma é ligada pelo macth a uma variável que será utilizada em algum momento.
+
+### Função e Pattern Matching
+
+
 
 ## Exercicios
