@@ -16,8 +16,7 @@
 
 * Pattern Matching:
   * Atribuição
-  * Matches complexos
-  * Operador Pipe
+  * Matches complexos 
 
 * Função Anônima:
   * Funções e Pattern Matching
@@ -30,6 +29,7 @@
   * Funções Privada
   * Modulo
   * Atributo de Módulo
+  * Operador Pipe
 
 ## Conceitos de Escalabilidade
 
@@ -317,7 +317,7 @@ iex(2)> put_elem tupla, 1, 23
 {:frank, 23}
 ```
 
-## Pattern Matching
+## Palavra Chave
 
 Essa é uma lista especial composta por dois elementos, onde o primeiro é um atom. As palavras-chaves compartilham o desempenho da lista e geralmente são usadas para passar alternativas a funções.
 
@@ -492,7 +492,22 @@ iex> swap. ({10, 11})
 {11, 10}
 ```
 
-Na função acima utiliza 2 parametros `c e d` no seu corpo é feita troca dos valores para `d e c`. Ao chamar a função `troca` e passar os valores é feito o match `10 = d e 11 = c`.  
+Na função acima utiliza 2 parametros `c e d` no seu corpo é feita troca dos valores para `d e c`. Ao chamar a função `troca` e passar os valores é feito o match `10 = d e 11 = c`. 
+
+Em elixir a função ter varias assinaturas, isso por causa do reconhecimento de padrões. No exemplo que será mostrado a função terá dois assinaturas ou corpos. Sabe-se que na função a seguir a tupla retornada por File.open tem `:ok`, seu primeiro elemento se o arquivo foi aberto, então escrevemos uma função que exibe a primeira linha de um arquivo aberto com sucesso ou uma mensagem de erro simples se o arquivo não pôde ser aberto.
+
+```elixir
+
+iex> handle_open = fn
+2 ...> {:ok, file} -> "Read data: #{IO.read(file, :line)}"
+3 ...> {_, error} -> "Error: #{:file.format_error(error)}"
+4 ...> end
+5 #Function<12.17052888 in :erl_eval.expr/5>
+6 iex> handle_open.(File.open("code/intro/hello.exs")) # this file exists
+7 "Read data: IO.puts \"Hello, World!\"\n"
+8 iex> handle_open.(File.open("nonexistent")) # this one doesn't
+9 "Error: no such file or directory"
+```   
 
 ## Exercicios
 
@@ -503,3 +518,4 @@ Execute o IEx. Crie e execute as funções que fazem o seguinte:
 3. tupla_para_lista.( { 1357, 2468 } ) #=> [ 1357, 2468 ]
 
 
+Escreva uma função que receba três argumentos. Se os dois primeiros forem zero, retorne "ElixirPhoenix". Se o primeiro for zero, retorne "Elixir". Se o segundo for zero, retorne "Phoenix". Caso contrário, retorne o terceiro argumento. Não use nenhum recurso de idioma que ainda não tenhamos abordado neste livro.
