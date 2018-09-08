@@ -16,7 +16,6 @@
 
 * Pattern Matching:
   * Atribuição
-  * Ignorando valores
   * Matches complexos
   * Operador Pipe
 
@@ -336,3 +335,84 @@ Existem três principais relevancias da palavra-chave ou lista de palavra-chave:
 * As chaves são atoms;
 * Elas estão ordenadas;
 * e não são unicas;
+
+## PATTERN MATCHING
+
+Suas principais funcionalidades são atribuir valores, procurar padrões em valores, estruturas de dados e funções, comparar diferentes tipos e separar estruturas complexas em estruturas mais simples.
+
+### Atribuições
+
+Em elixir o operador `=` pode ser usado para atribuir variáveis.
+
+```elixir
+
+iex(5)> x = 2
+2
+```
+
+Quando atribuimos o valor `2` a variável `x`, na verdade o que esta acontecendo é uma checagem de padrões, não se diz x igual a 2 e sim, x macth 2, estamos tentando casar o valor do lado esquerdo com o do lado direito.
+
+```elixir
+
+iex(6)> x = 2
+2
+iex(7)> 2 = x 
+2
+iex(8)> 3 = x
+** (MatchError) no match of right hand side value: 2
+```
+
+### Matches Complexos
+
+Vamos usar o operador `=` com estruturas mais complexas.
+
+```elixir
+
+iex(20)> {:curso, nome} = {:curso, "Phoenix"}
+{:curso, "Phoenix"}
+iex(21)> nome  
+"Phoenix"
+
+#Se tentarmos casar atoms diferentes, o match não acontece e temos erro.
+iex(22)> {:curso, nome} = {:treinamento, "Elixir"} 
+** (MatchError) no match of right hand side value: {:treinamento, "Elixir"}
+```
+
+Podemos usar o `_` (underscore) para pular um valor que não interressa. Vamos supor que queremos pegar o segundo elemento de três.
+
+```elixir
+
+iex(22)> {_, numero} = {"não quero", 200 }
+{"não quero", 200}
+iex(23)> numero
+200
+
+iex(24)> {_, numero, _} = {1,2,3}
+{1, 2, 3}
+iex(25)> numero
+2
+```
+
+Tem a possibilidade de fazer o macth com o caractere `^` conhecido como operador `Pin`, com ele impedimos que o processo faça a religação de um valor a uma variável (rebind), tornando-a completamente imutável.
+
+```elixir
+
+iex(1)> [a, c] = [4,6]
+[4, 6]
+iex(2)> a + c
+10
+iex(3)> [a, c] = [3, 5]
+[3, 5]
+iex(4)> a + c
+8
+iex(5)> [^a, c] = [8, 10]
+** (MatchError) no match of right hand side value: '\b\n'
+
+iex(5)> [^a, c] = [3, 10]
+[3, 10]
+iex(6)> a
+3
+iex(7)> c
+10
+iex(8)>
+```
