@@ -16,7 +16,6 @@
 
 * Pattern Matching:
   * Atribuição
-  * Ignorando valores
   * Matches complexos
   * Operador Pipe
 
@@ -319,4 +318,188 @@ iex(2)> put_elem tupla, 1, 23
 ```
 
 ## Pattern Matching
+
+Essa é uma lista especial composta por dois elementos, onde o primeiro é um atom. As palavras-chaves compartilham o desempenho da lista e geralmente são usadas para passar alternativas a funções.
+
+```elixir
+
+iex(1)> [Curso: "Phoenix", Elixir: "linguagem"]
+[Curso: "Phoenix", "Elixir": "linguagem"]
+
+iex(2)> [{:Curso, "Phoenix"}, {:Elixir, "linguagem"}]
+[Curso: "Phoenix", "Elixir": "linguagem"]
+```
+
+Existem três principais relevancias da palavra-chave ou lista de palavra-chave:
+
+* As chaves são atoms;
+* Elas estão ordenadas;
+* e não são unicas;
+
+## PATTERN MATCHING
+
+Suas principais funcionalidades são atribuir valores, procurar padrões em valores, estruturas de dados e funções, comparar diferentes tipos e separar estruturas complexas em estruturas mais simples.
+
+### Atribuições
+
+Em elixir o operador `=` pode ser usado para atribuir variáveis.
+
+```elixir
+
+iex(5)> x = 2
+2
+```
+
+Quando atribuimos o valor `2` a variável `x`, na verdade o que esta acontecendo é uma checagem de padrões, não se diz x igual a 2 e sim x macth 2, estamos tentando casar o valor do lado esquerdo com o do lado direito.
+
+```elixir
+
+iex(6)> x = 2
+2
+iex(7)> 2 = x 
+2
+iex(8)> 3 = x
+** (MatchError) no match of right hand side value: 2
+```
+
+### Matches Complexos
+
+Vamos usar o operador `=` com estruturas mais complexas.
+
+```elixir
+
+iex(20)> {:curso, nome} = {:curso, "Phoenix"}
+{:curso, "Phoenix"}
+iex(21)> nome  
+"Phoenix"
+
+#Se tentarmos casar atoms diferentes, o match não acontece e temos erro.
+iex(22)> {:curso, nome} = {:treinamento, "Elixir"} 
+** (MatchError) no match of right hand side value: {:treinamento, "Elixir"}
+```
+
+Podemos usar o `_` (underscore) para pular um valor que não interessa. Caso queira pegas apenas um valor ou valores específicos de dentro de uma estrutura.
+
+```elixir
+
+iex(22)> {_, numero} = {"não quero", 200 }
+{"não quero", 200}
+iex(23)> numero
+200
+
+iex(24)> {_, numero, _} = {1,2,3}
+{1, 2, 3}
+iex(25)> numero
+2
+```
+
+Tem a possibilidade de fazer o macth com o caractere `^` conhecido como operador `Pin`, com ele impedimos que o processo faça a religação de um valor a uma variável (rebind), tornando-a completamente imutável.
+
+```elixir
+
+iex(1)> [a, c] = [4,6]
+[4, 6]
+iex(2)> a + c
+10
+iex(3)> [a, c] = [3, 5]
+[3, 5]
+iex(4)> a + c
+8
+iex(5)> [^a, c] = [8, 10]
+** (MatchError) no match of right hand side value: '\b\n'
+
+iex(5)> [^a, c] = [3, 10]
+[3, 10]
+iex(6)> a
+3
+iex(7)> c
+10
+iex(8)>
+```
+
+Exercicios
+
+### Quais opções de macth não vai funcionar
+
+1. a = [2, 4, 6]
+2. a = 4
+3. 4 = b
+4. [a, b] = [ 4, 6, 8 ]
+5. a = [ [ 1, 3, 5 ] ]
+6. [a] = [ [ 6, 8, 10 ] ]
+7. [[a]] = [ [ 1, 2, 3 ] ]
+
+Some as opções que não funcionaram e de a resposta.
+
+### A variável "a" está vinculada ao valor 3. Qual das seguintes opções vai funcionar
+
+1. [ a, b, a ] = [ 2, 4, 2 ]
+2. [ a, b, a ] = [ 2, 1, 4 ]
+3. b = 1
+4. ^b = 2
+5. ^b = 1
+6. ^b = 3 - a
+
+Some as opções que funcionaram e de a resposta.
+
+## Função Anônima
+
+Como o `Elixir` é uma linguagem funcional, não é de se admirar que uma função é um tipo básico. A função anônima é um tipo de função tão específica e auto explicativa que não é necessário criar um nome. 
+
+Para criar uma precisa usar a palavra-chave `fn` para dar inicio, acrescentar os argumentos desejados, em seguida seta `->` contendo o corpo da função e para finalizar `end`.
+
+```elixir
+
+iex(22)> soma = fn (n1, n2) -> n1 + n2 end 
+#Function<12.99386804/2 in :erl_eval.expr/5>
+iex(23)> soma.(3,4)
+7
+
+iex(1)> curso = fn -> IO.puts "Elixir" end
+#Function<20.99386804/0 in :erl_eval.expr/5>
+iex(2)> curso.()
+Elixir
+:ok
+iex(3)> f1 = fn a, b -> a * b end 
+#Function<12.99386804/2 in :erl_eval.expr/5>
+iex(4)> f1.(5,3)
+15
+
+```
+
+Diferentes as funções nomeadas que veremos a seguir, para usarmos uma função anônima têm que usar o ponto `.` e passar os parâmetros entre parênteses `()`. A mesma é ligada pelo macth a uma variável que será utilizada em algum momento.
+
+Podemos usar `&` para abreviar funções anônimas, os `()` são usados como corpo e os parametros serão `&1, &2`.
+
+```elixir
+
+iex> sum = &(&1 + &2)
+iex> sum.(4, 3)
+7
+``` 
+
+### Função e Pattern Matching
+
+O Elixir não usa pattern matching apenas para variáveis, mais também para corresponder valores em funções, quando chamamos a função sum.(4,3) e passamos os argumentos 4 e 3, o elixir verifica as possíveis ligações e faz a correspondecia de valores &1 = 4 e &2 = 3. É o mesmo processo de quando escrevemos `{a,b} = {7,8}`.
+
+Sendo assim podemos usar correspondecia de padrões mais complexas quando chamamos uma função.
+
+```elixir
+
+iex> troca = fn {c, d} -> {d, c} fim
+#Function <12.17052888 em: erl_eval.expr / 5>
+iex> swap. ({10, 11})
+{11, 10}
+```
+
+Na função acima utiliza 2 parametros `c e d` no seu corpo é feita troca dos valores para `d e c`. Ao chamar a função `troca` e passar os valores é feito o match `10 = d e 11 = c`.  
+
+## Exercicios
+
+Execute o IEx. Crie e execute as funções que fazem o seguinte:
+
+1. list_concat.([:1, :2], [:3, :4]) #=> [:1, :2, :3, :4]
+2. sum.(4, 6, 8) #=> 18
+3. tupla_para_lista.( { 1357, 2468 } ) #=> [ 1357, 2468 ]
+
 
