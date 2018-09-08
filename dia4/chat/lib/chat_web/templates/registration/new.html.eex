@@ -12,7 +12,7 @@
     <br>
     <div class="form-label-group">
       <%= label f, :username, "Username", class: "control-label" %>
-      <%= text_input f, :username, class: "form-control", placeholder: "User name", required: true %>
+      <%= text_input f, :username, class: "form-control", placeholder: "Username", required: true %>
       <%= error_tag f, :username %>
     </div>
     <br>
