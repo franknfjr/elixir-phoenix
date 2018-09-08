@@ -20,7 +20,7 @@
 
 * Função Anônima:
   * Funções e Pattern Matching
-  * Case, cond e if
+  * if, unless, cond e case
   * Funções retornando funções
   * Função recebendo função como argumento
 
@@ -519,3 +519,43 @@ Execute o IEx. Crie e execute as funções que fazem o seguinte:
 
 
 Escreva uma função que receba três argumentos. Se os dois primeiros forem zero, retorne "ElixirPhoenix". Se o primeiro for zero, retorne "Elixir". Se o segundo for zero, retorne "Phoenix". Caso contrário, retorne o terceiro argumento. Não use nenhum recurso de idioma que ainda não tenhamos abordado neste livro.
+
+## if, unless, cond e case
+
+Em elixir essas construções não são especiais como em outras linguagens, elas são conhecidas como macros que são funções básicas. Tentem não usar tanto esses controle de fluxo, pois quanto menos controle de fluxo dentro das funções, tera um código mais focado e curto.
+
+### if e unless
+
+Como já conhecem o `if` em elixir o `unless` e como sé fosse o contrario. No caso do `if` ele verifica se a condição é verdade e o `unless` verifica se é falsa.
+
+```elixir
+
+iex> if 5 == 5, do: "é verdade!", else: "é falso!"
+"é verdade!"
+
+iex> if 1 == 2, do: "é verdade!", else: "é falso!"
+"é falso!"
+
+iex> if 1 == 1 do
+...> "é verdade!"
+...> else
+...> "é falso!"
+...> end
+é verdade!
+```
+
+Unless é parecido:
+
+```elixir
+
+iex> unless 1 == 1, do: "falso", else: "OK"
+"OK"
+iex> unless 1 == 2, do: "OK", else: "falso"
+"OK"
+iex> unless 1 == 2 do
+...> "OK"
+...> else
+...> "error"
+...> end
+"OK"
+```
