@@ -1,39 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
+   <head>
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="description" content="">
+      <meta name="author" content="">
 
-    <title>Hello Chat!</title>
-    <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
-  </head>
+      <title>Hello Chat!</title>
+      <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
+   </head>
 
-  <body>
-    <div class="container">
-      <header class="header">
-        <nav role="navigation">
-          <ul class="nav nav-pills pull-right">
-            <li><a href="http://www.phoenixframework.org/docs">Get Started</a></li>
-          </ul>
-        </nav>
-        <span class="logo"></span>
-      </header>
-      <%= if Chat.Auth.user_signed_in?(@conn) do %>
-      <nav>
-        Signed in as: <strong> <%= Chat.Auth.current_user(@conn).username %> </strong>
-      </nav>
-      <% end %>
-      <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
-      <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
+   <body>
+      <div class="container">
+         <header class="header">
+            <nav role="navigation">
+               <ul class="nav nav-pills pull-right">
+                  <%= if Chat.Auth.user_signed_in?(@conn) do %>
+                  <nav>
+                     Signed in as: <strong> <%= Chat.Auth.current_user(@conn).username %> </strong>
+                  </nav>
+                  <%= link "Sign Out", to: session_path(@conn, :delete), method: :delete, class: "btn btn-outline-primary" %>
+                  <% else %>
+                  <%= link "Sign In", to: session_path(@conn, :new), class: "btn btn-outline-primary" %>
+                  <% end %>
+               </ul>
+            </nav>
+            <span class="logo"></span>
+         </header>
 
-      <main role="main">
-        <%= render @view_module, @view_template, assigns %>
-      </main>
+         <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
+         <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
 
-    </div> <!-- /container -->
-    <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
-  </body>
+         <main role="main">
+            <%= render @view_module, @view_template, assigns %>
+         </main>
+      </div>
+
+      <!-- /container -->
+      <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
+   </body>
 </html>

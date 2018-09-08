@@ -19,6 +19,7 @@ defmodule ChatWeb.Router do
     get "/", PageController, :index, as: :page_path
 
     resources "/sessions", SessionController, only: [:new, :create]
+    delete "/sign_out", SessionController, :delete
 
   end
 

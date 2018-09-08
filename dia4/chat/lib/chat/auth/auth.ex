@@ -21,4 +21,8 @@ defmodule Chat.Auth do
   def user_signed_in?(conn) do
     !!current_user(conn)
   end
+
+  def sign_out(conn) do
+    Plug.Conn.configure_session(conn, drop: true)
+  end
 end
