@@ -350,7 +350,7 @@ iex(5)> x = 2
 2
 ```
 
-Quando atribuimos o valor `2` a variável `x`, na verdade o que esta acontecendo é uma checagem de padrões, não se diz x igual a 2 e sim, x macth 2, estamos tentando casar o valor do lado esquerdo com o do lado direito.
+Quando atribuimos o valor `2` a variável `x`, na verdade o que esta acontecendo é uma checagem de padrões, não se diz x igual a 2 e sim x macth 2, estamos tentando casar o valor do lado esquerdo com o do lado direito.
 
 ```elixir
 
@@ -378,7 +378,7 @@ iex(22)> {:curso, nome} = {:treinamento, "Elixir"}
 ** (MatchError) no match of right hand side value: {:treinamento, "Elixir"}
 ```
 
-Podemos usar o `_` (underscore) para pular um valor que não interressa. Vamos supor que queremos pegar o segundo elemento de três.
+Podemos usar o `_` (underscore) para pular um valor que não interessa. Caso queira pegas apenas um valor ou valores específicos de dentro de uma estrutura.
 
 ```elixir
 
@@ -416,3 +416,4 @@ iex(7)> c
 10
 iex(8)>
 ```
+
