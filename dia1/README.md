@@ -417,3 +417,27 @@ iex(7)> c
 iex(8)>
 ```
 
+Exercicios
+
+### Quais opções de macth não vai funcionar
+
+1. a = [2, 4, 6]
+2. a = 4
+3. 4 = b
+4. [a, b] = [ 4, 6, 8 ]
+5. a = [ [ 1, 3, 5 ] ]
+6. [a] = [ [ 6, 8, 10 ] ]
+7. [[a]] = [ [ 1, 2, 3 ] ]
+
+Some as opções que não funcionaram e de a resposta.
+
+### A variável "a" está vinculada ao valor 3. Qual das seguintes opções vai funcionar
+
+1. [ a, b, a ] = [ 2, 4, 2 ]
+2. [ a, b, a ] = [ 2, 1, 4 ]
+3. b = 1
+4. ^b = 2
+5. ^b = 1
+6. ^b = 3 - a
+
+Some as opções que funcionaram e de a resposta.
