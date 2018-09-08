@@ -20,9 +20,9 @@
                   <nav>
                      Signed in as: <strong> <%= Chat.Auth.current_user(@conn).username %> </strong>
                   </nav>
-                  <%= link "Sign Out", to: session_path(@conn, :delete), method: :delete, class: "btn btn-outline-primary" %>
+                    <li> <%= link "Sign Out", to: session_path(@conn, :delete), method: :delete, class: "btn btn-outline-primary" %> </li>
                   <% else %>
-                  <%= link "Sign In", to: session_path(@conn, :new), class: "btn btn-outline-primary" %>
+                     <li> <%= link "Sign In", to: session_path(@conn, :new), class: "btn btn-outline-primary" %> </li>
                   <% end %>
                </ul>
             </nav>
