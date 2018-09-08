@@ -21,7 +21,11 @@
         </nav>
         <span class="logo"></span>
       </header>
-
+      <%= if Chat.Auth.user_signed_in?(@conn) do %>
+      <nav>
+        Signed in as: <strong> <%= Chat.Auth.current_user(@conn).username %> </strong>
+      </nav>
+      <% end %>
       <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
       <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
 

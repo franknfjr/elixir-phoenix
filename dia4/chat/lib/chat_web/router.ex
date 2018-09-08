@@ -16,7 +16,7 @@ defmodule ChatWeb.Router do
   scope "/", ChatWeb do
     pipe_through :browser # Use the default browser stack
 
-    get "/", PageController, :index
+    get "/", PageController, :index, as: :page_path
 
     resources "/sessions", SessionController, only: [:new, :create]
 
