@@ -23,7 +23,7 @@ defmodule ChatWeb.SessionController do
   def delete(conn, _params) do
     conn
     |> Auth.sign_out()
-    |> redirect to: "/"
+    |> redirect to: "/sessions/new"
   end
 
 end

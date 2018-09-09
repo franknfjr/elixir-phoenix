@@ -8,26 +8,28 @@
       <meta name="author" content="">
 
       <title>Hello Chat!</title>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
       <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
    </head>
 
    <body>
       <div class="container">
          <header class="header">
-            <nav role="navigation">
-               <ul class="nav nav-pills pull-right">
-                  <%= if Chat.Auth.user_signed_in?(@conn) do %>
-                  <nav>
-                     Signed in as: <strong> <%= Chat.Auth.current_user(@conn).username %> </strong>
-                  </nav>
-                    <li> <%= link "Sign Out", to: session_path(@conn, :delete), method: :delete, class: "btn btn-outline-primary" %> </li>
-                  <% else %>
-                     <li> <%= link "Sign In", to: session_path(@conn, :new), class: "btn btn-outline-primary" %> </li>
-                  <% end %>
-                 <li> <%= link "Register", to: registration_path(@conn, :new), class: "btn btn-outline-primary" %> </li>
-               </ul>
-            </nav>
-            <span class="logo"></span>
+           <nav class="nav light-blue accent-4">
+             <div class="nav-wrapper">
+            <div class="nav-wrapper">
+              <a href="#!" class="brand-logo">Chat!</a>
+              <ul class="right hide-on-med-and-down">
+                <%= if Chat.Auth.user_signed_in?(@conn) do %>
+                <li>Signed in as: <strong> <%= Chat.Auth.current_user(@conn).username %> </strong> </li>
+                <li> <%= link "Sign Out", to: session_path(@conn, :delete), method: :delete, class: "btn btn-outline-primary light-blue accent-3" %> </li>
+                <% else %>
+                <li> <%= link "Sign In", to: session_path(@conn, :new), class: "btn btn-outline-primary light-blue accent-3" %> </li>
+                <% end %>
+                <li> <%= link "Register", to: registration_path(@conn, :new), class: "btn btn-outline-primary light-blue accent-3" %> </li>
+              </ul>
+            </div>
+          </nav>
          </header>
 
          <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
@@ -40,6 +42,7 @@
 
       <!-- /container -->
       <script  src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
       <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
    </body>
 </html>
