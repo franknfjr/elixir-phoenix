@@ -611,3 +611,19 @@ iex(1)> case {4,6,8} do
 ...(1)> end
 "Isso vai casar porque 6 é maior que zero"
 ```
+
+### Funções retornando funções
+
+Aqui basicamente temos uma variavel que recebe uma função e o corpo dessa função é uma outra função. Segue um exemplo simples de funções sem argumentos.
+
+```elixir
+
+iex> fun_r_fun = fn -> fn -> "Elixir" end end
+#Function<12.17052888 in :erl_eval.expr/5>
+iex> fun_r_fun .()
+#Function<12.17052888 in :erl_eval.expr/5>
+iex> fun_r_fun .().()
+"Elixir"
+```
+
+Quando é chamado a função externa `fun_r_fun.()` é retornado a função interna, e quando se chama `fun_r_fun.().()` a função interna é examinada e retorna "Elixir".
