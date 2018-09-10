@@ -611,4 +611,3 @@ iex(1)> case {4,6,8} do
 ...(1)> end
 "Isso vai casar porque 6 é maior que zero"
 ```
-
