@@ -16,11 +16,12 @@
 
 * Pattern Matching:
   * Atribuição
-  * Matches complexos 
+  * Matches complexos
 
 * Função Anônima:
   * Funções e Pattern Matching
   * if, unless, cond e case
+  * Guard Clauses
   * Funções retornando funções
   * Função recebendo função como argumento
 
@@ -572,4 +573,42 @@ iex(6)> cond do
 ...(6)> 2 + 2 == 4 -> "Eeeee é verdade!"
 ...(6)> end
 "Eeeee é verdade!"
-``` 
+```
+
+### Case
+
+Essa macro nos permite tentar casar um valor com um conjunto de padrões, isso é feito até achar um correspondente e o efetue o match de forma correta.
+
+```elixir
+
+case File.open("elixirphoenix.ex") do
+{ :ok, file } ->
+IO.puts "Primeira linha é: #{IO.read(file, :line)}"
+{ :error, reason } ->
+IO.puts "Falha ao tentar abrir o arquivo: #{reason}"
+end
+```
+
+```elixir
+
+iex(2)> case "elixir" do
+...(2)> "Phoenix" -> "elixir não é Phoenix"
+...(2)> "Java" -> "elixir não é Java"
+...(2)> _  -> "elixir não é underscore, mas underscore é um coringa que casa com tudo beleza?"
+...(2)> end
+"elixir não é underscore, mas underscore é um coringa que casa com tudo beleza?"
+```
+
+### Guard Clauses
+
+São experessões implementadas que certificam que determinada função receba somente um tipo de argumento, validar o argumento.
+
+```elixir
+
+iex(1)> case {4,6,8} do
+...(1)> {4,x,8} when x > 0 -> "Isso vai casar porque 6 é maior que zero"
+...(1)> _ -> "Isso casaria se não tivesse casado antes"
+...(1)> end
+"Isso vai casar porque 6 é maior que zero"
+```
+
