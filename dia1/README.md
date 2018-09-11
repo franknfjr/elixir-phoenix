@@ -643,3 +643,29 @@ iex(8)> outra.()
 ```
 
 ### Função recebendo função como argumento
+
+O código em `Elixir` tem a capacidade de passar funções em quase todo lugar, inclusive como argumento de uma função.
+
+```elixir
+
+iex> tempo = fn n -> n * 4 end
+#Function<12.17052888 in :erl_eval.expr/5>
+iex> use = fn (fun, value) -> fun.(value) end
+#Function<12.17052888 in :erl_eval.expr/5>
+iex> use.(tempo, 6)
+24
+```
+
+`Use`é uma função que utiliza uma segunda função mais um valor e exibe um resultado. Temos o módulo interno da liguagem o `Enum` que tem uma função chamada `map`. Essa função recebe dois argumentos, sendo um coleção e o outro uma função.
+
+```elixir
+
+iex(1)> lista = [2,4,6,8, 10]
+[2, 4, 6, 8, 10]
+iex(2)> Enum.map lista, fn elem ->  elem * 2 end
+[4, 8, 12, 16, 20]
+```
+
+É retornado uma lista que é o resultado de execução da função para cada elemento da lista.
+
+# Módulo é Função nomeada
