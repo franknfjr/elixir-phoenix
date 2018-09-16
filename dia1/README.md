@@ -669,3 +669,18 @@ iex(2)> Enum.map lista, fn elem ->  elem * 2 end
 É retornado uma lista que é o resultado de execução da função para cada elemento da lista.
 
 # Módulo é Função nomeada
+
+A medida que seu código cresce a tendência é organiza-lo. Com `Elixir` isso fica fácil, para fazer isso, deve-se separar o código em funções e organizar essas dentro de módulos.
+
+E por padrão as funções nomeadas em `Elixir` devem está dentro de módulos.
+
+```elixir
+
+defmodule Times do
+  def double(n) do
+    n * 2
+  end
+end
+```
+
+Como observado no exemplo acima, para criar um módulo basta usar a palavra reservada `defmodule` em seguida nome do módulo e dentro dele as funções.
