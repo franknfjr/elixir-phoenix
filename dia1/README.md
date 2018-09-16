@@ -732,4 +732,13 @@ iex(2)> Times.double("Elixir")
 
 O erro diz que tentamos realizar aritmética em uma string. Mas além disso ele escreve nossa função como Times.double/1, esse `1` que dizer que essa função tem aridade um, recebe um parâmetro. Se escrevermos uma função double com 3 parâmetros double/3, para o elixir são funções totalmente diferentes apesar de possuirem o mesmo nome. As funções nomeadas são identificadas tanto pelo nome, como pelo número de parâmetros (aridade).
 
+### Exercício
+
+1. Estenda o módulo Times com uma tripla função que multiplica seu parâmetro por três.
+
+2. Execute o resultado no IEx. Use as duas técnicas para compilar o arquivo.
+
+3. Adicione uma função quádrupla. (Talvez possa chamar a dupla função ...)
+
 ### Função Privada
+
