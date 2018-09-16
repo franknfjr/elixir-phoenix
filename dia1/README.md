@@ -25,10 +25,10 @@
   * Funções retornando funções
   * Função recebendo função como argumento
 
-* Modulo e Função Nomeada:
+* Módulo e Função Nomeada:
+  * Módulo
   * Função do end
-  * Funções Privada
-  * Modulo
+  * Funções Privada  
   * Atributo de Módulo
   * Operador Pipe
 
@@ -668,7 +668,9 @@ iex(2)> Enum.map lista, fn elem ->  elem * 2 end
 
 É retornado uma lista que é o resultado de execução da função para cada elemento da lista.
 
-# Módulo é Função nomeada
+## Módulo é Função nomeada
+
+### Módulo
 
 A medida que seu código cresce a tendência é organiza-lo. Com `Elixir` isso fica fácil, para fazer isso, deve-se separar o código em funções e organizar essas dentro de módulos.
 
@@ -684,3 +686,50 @@ end
 ```
 
 Como observado no exemplo acima, para criar um módulo basta usar a palavra reservada `defmodule` em seguida nome do módulo e dentro dele as funções.
+
+Para compilar um módulo, pode-se fazer das seguintes formas:
+
+Caso esteja forá do iex.
+
+```elixir
+
+$ iex times.exs
+iex> Times.double(2)
+4
+```
+
+Caso esteja no iex.
+
+```elixir
+
+iex(1)> c "times.exs"
+[Times]
+iex(2)> Times.double(8)
+16
+```
+
+### Função end do
+
+Podmeos escrever funções nomeadas de duas formas: com `do e end` e apenas em uma linha com `do`.
+
+```elixir
+
+# do end
+def double(n) do
+  n * 2
+end
+
+def double(n), do: n * 2
+```
+
+Se tentamos passar um tipo diferente dentro da função double retornará um erro.
+
+```elixir
+
+iex(2)> Times.double("Elixir")
+** (ArithmeticError) bad argument in arithmetic expression times.exs:3: Times.double/1
+```
+
+O erro diz que tentamos realizar aritmética em uma string. Mas além disso ele escreve nossa função como Times.double/1, esse `1` que dizer que essa função tem aridade um, recebe um parâmetro. Se escrevermos uma função double com 3 parâmetros double/3, para o elixir são funções totalmente diferentes apesar de possuirem o mesmo nome. As funções nomeadas são identificadas tanto pelo nome, como pelo número de parâmetros (aridade).
+
+### Função Privada
