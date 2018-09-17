@@ -742,3 +742,12 @@ O erro diz que tentamos realizar aritmética em uma string. Mas além disso ele 
 
 ### Função Privada
 
+Essas funções só podem ser chamadas dentro do módulo a qual foram declaradas. Para criar uma ultiliza a macro `defp` isso indica que é uma função privada. Se tentar execultar uma delas fora do módulo será retornado um erro que a função não existe.
+
+```elixir
+
+defmodule Privade do
+  def fun(a) when is_list(a), do: true
+  defp fun(a), do: false
+end
+```
