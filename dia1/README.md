@@ -1,39 +1,41 @@
 # Introdução ao Elixir:
-  
-## Conceitos de Escalabilidade
-  
-## Tolerância a falha
-  
-## Linguagem funcional
 
-* Tipos básico:
-  * Booleans
-  * Atoms
-  * Strings
-  * Listas
-  * Maps
-  * Tuplas
-  * Palavra-chave
+* Conceitos de Escalabilidade
+* Tolerância a falha
+* Linguagem funcional
 
-* Pattern Matching:
-  * Atribuição
-  * Matches complexos
+# Tipos básico:
 
-* Função Anônima:
-  * Funções e Pattern Matching
-  * if, unless, cond e case
-  * Guard Clauses
-  * Funções retornando funções
-  * Função recebendo função como argumento
+* Booleans
+* Atoms
+* Strings
+* Listas
+* Maps
+* Tuplas
+* Palavra-chave
 
-* Módulo e Função Nomeada:
-  * Módulo
-  * Função do end
-  * Funções Privada  
-  * Atributo de Módulo
-  * Operador Pipe
+# Pattern Matching:
 
-## Conceitos de Escalabilidade
+* Atribuição
+* Matches complexos
+
+# Função Anônima:
+
+* Funções e Pattern Matching
+* if, unless, cond e case
+* Guard Clauses
+* Funções retornando funções
+* Função recebendo função como argumento
+
+# Módulo e Função Nomeada:
+
+* Módulo
+* Função do end
+* Funções Privada  
+* Atributo de Módulo
+* Operador Pipe
+
+# Conceitos de Escalabilidade
 
 Escalabilidade é basicamente a capacidade de expanção sem aumento elevado do custo. Em engenharia de software é uma caracteristica desejavel em todo o sistema, que indica sua capacidade de manipular uma porção crescente de trabalho de forma uniforme, ou estar preparado para crescer.
 Em elixir todo o código é executado dentro de threads de execução leves (chamados processos) que são isolados e trocam informações por meio de mensagens.
@@ -53,7 +55,7 @@ receive do
 end
 ```
 
-## Tolerança a falhas
+# Tolerança a falhas
 
 Em software as falhas são decorrentes de desenvolvimentos de bugs e causados por humanos. As mesma são tratadas com basicamente com detectação e recuperação, e tecnicas de tolerancia a falhas.
 
@@ -68,7 +70,7 @@ TCP.Pool,
 Supervisor.start_link(children, strategy: :one_for_one)
 ```
 
-## Linguagem funcional
+# Linguagem funcional
 
 É um paradigma de programação onde não é tido para ao código com ele deve fazer, quando e como. Não será desenvolvido passo a passo, mas sim como uma sequência de funções e passos, as quais de maneira composta iram resolver problemas.
 
@@ -82,11 +84,11 @@ name #=> "John Doe"
 
 O Elixir depende muito desses recursos para garantir que seu software esteja funcionando sob as restrições esperadas. E quando não é, não se preocupe, os supervisores estão de prontidão.
 
-## Tipos básicos
+# Tipos básicos
 
 Em Elixir como em outras linguagens existes tipos como númericos, booleanos e coleções, mas ele trás alguns extras como atoms, binários e funções. É isso, funçãos também são tipos em elixir.
 
-### Booleans
+## Booleans
 
 Elixir apresenta três maneiras de expressões booleans: `true`, `false` e `nil` avaliado como false em contextos booleanos).
 
@@ -338,11 +340,11 @@ Existem três principais relevancias da palavra-chave ou lista de palavra-chave:
 * Elas estão ordenadas;
 * e não são unicas;
 
-## PATTERN MATCHING
+# PATTERN MATCHING
 
 Suas principais funcionalidades são atribuir valores, procurar padrões em valores, estruturas de dados e funções, comparar diferentes tipos e separar estruturas complexas em estruturas mais simples.
 
-### Atribuições
+## Atribuições
 
 Em elixir o operador `=` pode ser usado para atribuir variáveis.
 
@@ -364,7 +366,7 @@ iex(8)> 3 = x
 ** (MatchError) no match of right hand side value: 2
 ```
 
-### Matches Complexos
+## Matches Complexos
 
 Vamos usar o operador `=` com estruturas mais complexas.
 
@@ -444,7 +446,7 @@ Some as opções que não funcionaram e de a resposta.
 
 Some as opções que funcionaram e de a resposta.
 
-## Função Anônima
+# Função Anônima
 
 Como o `Elixir` é uma linguagem funcional, não é de se admirar que uma função é um tipo básico. A função anônima é um tipo de função tão específica e auto explicativa que não é necessário criar um nome. 
 
@@ -480,7 +482,7 @@ iex> sum.(4, 3)
 7
 ``` 
 
-### Função e Pattern Matching
+## Função e Pattern Matching
 
 O Elixir não usa pattern matching apenas para variáveis, mais também para corresponder valores em funções, quando chamamos a função sum.(4,3) e passamos os argumentos 4 e 3, o elixir verifica as possíveis ligações e faz a correspondecia de valores &1 = 4 e &2 = 3. É o mesmo processo de quando escrevemos `{a,b} = {7,8}`.
 
@@ -526,7 +528,7 @@ Escreva uma função que receba três argumentos. Se os dois primeiros forem zer
 
 Em elixir essas construções não são especiais como em outras linguagens, elas são conhecidas como macros que são funções básicas. Tentem não usar tanto esses controle de fluxo, pois quanto menos controle de fluxo dentro das funções, tera um código mais focado e curto.
 
-### if e unless
+## if e unless
 
 Como já conhecem o `if` em elixir o `unless` e como sé fosse o contrario. No caso do `if` ele verifica se a condição é verdade e o `unless` verifica se é falsa.
 
@@ -562,7 +564,7 @@ iex> unless 1 == 2 do
 "OK"
 ```
 
-### Cond
+## Cond
 
 Essa macro da a possibilidade de encontrar a primeira condição valida no meio de várias condições.
 
@@ -576,7 +578,7 @@ iex(6)> cond do
 "Eeeee é verdade!"
 ```
 
-### Case
+## Case
 
 Essa macro nos permite tentar casar um valor com um conjunto de padrões, isso é feito até achar um correspondente e o efetue o match de forma correta.
 
@@ -600,7 +602,7 @@ iex(2)> case "elixir" do
 "elixir não é underscore, mas underscore é um coringa que casa com tudo beleza?"
 ```
 
-### Guard Clauses
+## Guard Clauses
 
 São experessões implementadas que certificam que determinada função receba somente um tipo de argumento, validar o argumento.
 
@@ -613,7 +615,7 @@ iex(1)> case {4,6,8} do
 "Isso vai casar porque 6 é maior que zero"
 ```
 
-### Funções retornando funções
+## Funções retornando funções
 
 Aqui basicamente temos uma variável que recebe uma função e o corpo dessa função é uma outra função. Segue um exemplo simples de funções sem argumentos.
 
@@ -643,7 +645,7 @@ iex(8)> outra.()
 "Phoenix"
 ```
 
-### Função recebendo função como argumento
+## Função recebendo função como argumento
 
 O código em `Elixir` tem a capacidade de passar funções em quase todo lugar, inclusive como argumento de uma função.
 
@@ -669,9 +671,9 @@ iex(2)> Enum.map lista, fn elem ->  elem * 2 end
 
 É retornado uma lista que é o resultado de execução da função para cada elemento da lista.
 
-## Módulo é Função nomeada
+# Módulo é Função nomeada
 
-### Módulo
+## Módulo
 
 A medida que seu código cresce a tendência é organiza-lo. Com `Elixir` isso fica fácil, para fazer isso, deve-se separar o código em funções e organizar essas dentro de módulos.
 
@@ -709,7 +711,7 @@ iex(2)> Times.double(8)
 16
 ```
 
-### Função end do
+## Função end do
 
 Podmeos escrever funções nomeadas de duas formas: com `do e end` e apenas em uma linha com `do`.
 
@@ -741,7 +743,7 @@ O erro diz que tentamos realizar aritmética em uma string. Mas além disso ele 
 
 3. Adicione uma função quádrupla. (Talvez possa chamar a dupla função ...)
 
-### Função Privada
+## Função Privada
 
 Essas funções só podem ser chamadas dentro do módulo a qual foram declaradas. Para criar uma ultiliza a macro `defp` isso indica que é uma função privada. Se tentar execultar uma delas fora do módulo será retornado um erro que a função não existe.
 
@@ -753,7 +755,7 @@ defmodule Privade do
 end
 ```
 
-### Atributo de Módulo
+## Atributo de Módulo
 
 Em Elixir o atributo é utilizado normalmente onde programados Ruby ou Java podem empregar constantes. Eles não são variáveis convencionais, usa-se apenas para configuração e metadados. Os módulos Elixir possui metadados associados, cada item de metadados é chamado de atributo do módulo e reconhecido por um nome. Ao prefixar o nome com "@", pode acessa-lo.
 
@@ -773,7 +775,7 @@ Exemplo foi escrito por Frank Nascimento
 :ok
 ```
 
-### Operador Pipe
+## Operador Pipe
 
 Esse operador `|>` tem como função passar o resultado de uma expressão com argumento para outra.
 
