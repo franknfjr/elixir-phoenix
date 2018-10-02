@@ -800,6 +800,6 @@ Observe que na função `filter` está sendo passado somente a função anônima
 
 ### Exercício
 
-1. Criamos uma lista com 10 itens que, então aplicamos imposto de 5% em cada um dos produtos, e depois filtramos somente os que têm valor superior a R$ 20,00. Por fim, somamos todos estes valores e mostramos o resultado na tela, tudo utilizando o que aprendemos junto com o pipe.
+1. Criar uma lista com 10 itens, aplicar imposto de 5% em cada um dos produtos, e depois filtramos somente os que têm valor superior a R$ 20,00. Por fim, somamos todos estes valores e mostramos o resultado na tela, tudo utilizando o que aprendemos junto com o pipe.
 
 obs.: os intens ficam dentro de maps %{produto: "descrição", valor: 0.0}
