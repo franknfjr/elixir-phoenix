@@ -751,3 +751,23 @@ defmodule Privade do
   defp fun(a), do: false
 end
 ```
+
+### Atributo de Módulo
+
+Em Elixir o atributo é utilizado normalmente onde programados Ruby ou Java podem empregar constantes. Eles não são variáveis convencionais, usa-se apenas para configuração e metadados. Os módulos Elixir possui metadados associados, cada item de metadados é chamado de atributo do módulo e reconhecido por um nome. Ao prefixar o nome com "@", pode acessa-lo.
+
+```elixir
+
+defmodule Exemplo do
+    @autor "Frank Nascimento"
+    def get_autor do
+        @autor
+    end
+end
+
+iex(1)> c ("atributos.ex")
+[Exemplo]
+iex(2)> IO.puts"Exemplo foi escrito por #{Exemplo.get_autor}"
+Exemplo foi escrito por Frank Nascimento
+:ok
+```
