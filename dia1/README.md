@@ -1,9 +1,10 @@
-# introdução ao Elixir
-
-* Introdução ao Elixir:
-  * Conceitos de Escalabilidade
-  * Tolerância a falha
-  * Linguagem funcional
+# Introdução ao Elixir:
+  
+## Conceitos de Escalabilidade
+  
+## Tolerância a falha
+  
+## Linguagem funcional
 
 * Tipos básico:
   * Booleans
