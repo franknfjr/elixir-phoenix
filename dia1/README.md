@@ -771,3 +771,35 @@ iex(2)> IO.puts"Exemplo foi escrito por #{Exemplo.get_autor}"
 Exemplo foi escrito por Frank Nascimento
 :ok
 ```
+
+### Operador Pipe
+
+Esse operador `|>` tem como função passar o resultado de uma expressão com argumento para outra.
+
+Aninhar funções é algo que pode se tornar confuso, ainda mais quando essas chamadas de funções ficam incorporadas em tal intensidade que torna-se muito difícil de acompanhar.
+
+Irei usar o módulo Enum e suas funções `map` e `filter`, será criada uma coleção, o `map` sevirá para criar uma nova coleção e o `filter` volta a coleção, somente os elementos que passada a função retorne true. 
+
+```elixir
+
+iex(1)> colecao = [5,6,7,8,9]
+[5, 6, 7, 8, 9]
+iex(2)> Enum.filter(Enum.map(colecao, &(&1 * 3)), &(&1>20))
+[21, 24, 27]
+```
+
+Para entender o que esta acontecendo, tem que ler da direita para esquerda, de dentro para fora. Com o operador `Pipe` ocorre da esquerda para direita, de fora para dentro. Tornando o entendimento e escrita mais simples.
+
+```elixir
+
+iex(3)> Enum.map(colecao, &(&1 * 3)) |> Enum.filter(&(&1 > 20))
+[21, 24, 27]
+```
+
+Observe que na função `filter` está sendo passado somente a função anônima, pois o operador `Pipe` passou de forma automática o resultado da função `map`, como primeiro argumento.
+
+### Exercício
+
+1. Criamos uma lista com 10 itens que, então aplicamos imposto de 5% em cada um dos produtos, e depois filtramos somente os que têm valor superior a R$ 20,00. Por fim, somamos todos estes valores e mostramos o resultado na tela, tudo utilizando o que aprendemos junto com o pipe.
+
+obs.: os intens ficam dentro de maps %{produto: "descrição", valor: 0.0}
