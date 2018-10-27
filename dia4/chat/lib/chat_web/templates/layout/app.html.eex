@@ -21,7 +21,7 @@
               <a href="#!" class="brand-logo">Chat!</a>
               <ul class="right hide-on-med-and-down">
                 <%= if Chat.Auth.user_signed_in?(@conn) do %>
-                <li>Signed in as: <strong> <%= Chat.Auth.current_user(@conn).username %> </strong> </li>
+                <li>Signed in as: <strong> <%= @current_user.username %> </strong> </li>
                 <li> <%= link "Sign Out", to: session_path(@conn, :delete), method: :delete, class: "btn btn-outline-primary light-blue accent-3" %> </li>
                 <% else %>
                 <li> <%= link "Sign In", to: session_path(@conn, :new), class: "btn btn-outline-primary light-blue accent-3" %> </li>
