@@ -3,9 +3,9 @@
 
 // To use Phoenix channels, the first step is to import Socket
 // and connect at the socket path in "lib/web/endpoint.ex":
-import {Socket} from "phoenix"
+import { Socket } from "phoenix"
 
-let socket = new Socket("/socket", {params: {token: window.userToken}})
+let socket = new Socket("/socket", { params: { token: window.userToken } })
 
 // When you connect, you'll often need to authenticate the client.
 // For example, imagine you have an authentication plug, `MyAuth`,
@@ -56,24 +56,25 @@ socket.connect()
 // Now that you are connected, you can join channels with a topic:
 let channel = socket.channel("room:lobby", {})
 let message = $("#message-input")
-let username = "Username"
+
 let chatMessages = document.getElementById("chat-messages")
 
 message.focus();
 
-message.on("keypress", event => {
+message.on('keypress', event => {
   if (event.keyCode == 13) {
-    channel.push("message:new", {message: message.val(), user: username})
+    channel.push('message:new', { message: message.val() })
     message.val("")
   }
-})
+});
 
-channel.on("message:new", payload => {
-  let template = document.createElement("div")
+channel.on('message:new', payload => {
+  let template = document.createElement("div");
   template.innerHTML = `<b>${payload.user}</b>: ${payload.message}<br>`
-  chatMessages.appendChild(template)
-  chatMessages.scrollTop = chatMessages.scrollHeight
-})
+
+  chatMessages.appendChild(template);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+});
 channel.join()
   .receive("ok", resp => { console.log("Joined successfully", resp) })
   .receive("error", resp => { console.log("Unable to join", resp) })
