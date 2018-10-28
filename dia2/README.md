@@ -64,7 +64,18 @@ defmodule AppWeb.Router do
 end
 ```
 
-No seu arquivo o nome dado ao seu aplicativo ficará no lugar de `App` isso vale para o módulo do `router` e `controller`. A primeira linha desse módulo `use AppWeb, :router`, torna as funções do router Phoenix disponível em nosso router específico.
+No seu arquivo o nome dado ao seu aplicativo ficará no lugar de `App` isso vale para o módulo do `router` e `controller`. A primeira linha desse módulo `use AppWeb, :router`, torna as funções do router Phoenix disponível em nosso router específico. Lembre-se os pipelines permitem que um conjunto de transformações de middleware seja aplicado a diferentes conjuntos de rotas.
+
+Se observar dentro do bloco de `scope` temos nossa primeira rota real:
+
+```elixir
+
+get "/", PageController, :index
+```
+
+`Get` é uma macro Phoenix que se extende para definir uma cláusula da match/5função. Corresponde ao verbo HTTP GET. Macros semelhantes existem para outros verbos HTTP, incluindo POST, PUT, PATCH, DELETE, OPÇÕES,CONNECT, TRACE e HEAD.
+
+A macro acima tem como primeiro argumento `"/"`, esse é o caminho da raiz da aplicação. Os outros dois argumentos são o `controller` e a ação, que queremos manusear nessa solicitação.
 
 ## Plug
 
