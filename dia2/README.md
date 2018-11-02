@@ -160,12 +160,192 @@ Em rotas tem muitas outras ações que podem ser feitas como: Forward, Path Help
 
 Ela tem como função básica corresponder aos pedidos por soquete e tópico para enviar ao canal correto. Canais são componentes Phoenix que tratam questões em tempo real, manipulam mensagens de entrada e saída transmitida por um soket para um determinado tópico. Mais a frente falaremos detalhadamente de canais, agora vamos ver como a rota do canal funciona.
 
+Manipulador de soket é montado no `endpoint.ex`, localizado no diretório `lib/app_web/endpointex.`, o mesmo cuida dos retornos de chamada de autenticação e das rotas do canal.
 
+```elixir
+defmodule AppWeb.Endpoint do
+  use Phoenix.Endpoint
+
+  socket "/socket", HelloWeb.UserSocket
+  ...
+end
+```
+
+Agora precisa do arquivo `user_socket.ex` localizado em `lib/app_web/channels/user_socket.ex`, usaremos a macro `channel/3` para definir nossa rota de canal. As rotas corresponderão a um padrão de tópicos para um canal manipular eventos. Caso tiver um módulo de canal chamado `SalaChannel` e um tópico chamado `"salas:*"`, teríamos um código parecido com esse:
+
+```elixir
+defmodule AppWeb.UserSocket do
+  use Phoenix.Socket
+
+  channel "salas:*", AppWeb.SalaChannel
+  ...
+end
+```
+
+Os tópicos são identificadores de string, o formato usado acima, nos permite definir tópicos e subtópicos na mesma string "topic:subtopic" e o `*` é um curinga que permite corresponder em qualquer subtópico. Sendo assim `"salas:1"` e `"salas:10"` seria correspondida pela mesma rota.
+
+A Phoenix abstrai a camada de transporte de soquete e inclui dois mecanismos de transporte: WebSockets e Long-Polling. Se quiséssemos ter certeza de que nosso canal é gerenciado por apenas um tipo de transporte, poderíamos especificar isso usando a opção `via`.
+
+```elixir
+channel "salas:*", AppWeb.SalaChannel, via: [Phoenix.Transports.WebSocket]
+```
+
+Um soquete pode manipular solicitação para vários canais.
+
+```elixir
+channel "salas:*", AppWeb.SalaChannel, via: [Phoenix.Transports.WebSocket]
+channel "tranportes:*", AppWeb.TransporteChannel
+```
+
+Tem a possibilidade de montar varios manipuladores de soquete no endpoint.
+
+```elixir
+socket "/socket", AppWeb.UserSocket
+socket "/admin-socket", AppWeb.AdminSocket
+```
 
 ## Plug
 
 É composto de módulos ou funções reutilizáveis para construir aplicações web, oferece procedimento discreto, como análise ou registro de cabeçalho de solicitação. Pode ser gravado para tratar quase tudo, desde a autenticação até o pré-processamento de parâmetros e até a renderização.
 
-Phoenix extrai grande proveito do Plug em geral, principalmente o Router e o Controller.
+Phoenix extrai grande proveito do Plug em geral, principalmente o router e o Controller. A especificação Plug vem em dois tipos: plug de função e plug de módulo.
+
+### Plug de função
+
+Para uma função atuar como um plug, a mesma precisa aceitar uma conexão struct (`%Plug.Conn{}`) e opções. Retornando uma estrutura de conexão. Veja como seria.
+
+```elixir
+#exemplo do guia phoenix https://hexdocs.pm/phoenix/plug.html
+
+def put_headers(conn, key_values) do
+  Enum.reduce key_values, conn, fn {k, v}, conn ->
+    Plug.Conn.put_resp_header(conn, to_string(k), v)
+  end
+end
+```
+
+Para usar um plug em um controlador fariamos da seguinte forma.
+
+```elixir
+defmodule AppWeb.MessageController do
+  use AppWeb, :controller
+
+  plug :put_headers, %{content_encoding: "gzip", cache_control: "max-age=3600"}
+  plug :put_layout, "sala.html"
+
+  ...
+end
+```
+
+Para enxegarmos melhor a eficiência do Plug, imagine um cenário onde precisa ser verificado uma série de condições e redirecionar ou parar se uma condição falhar. Sem o Plug seria basicamente assim:
+
+```elixir
+defmodule AppWeb.MessageController do
+  use AppWeb, :controller
+
+  def show(conn, params) do
+    case authenticate(conn) do
+      {:ok, user} ->
+        case find_message(params["id"]) do
+          nil ->
+            conn |> put_flash(:info, "A mesagem não foi encontrada") |> redirect(to: "/")
+          message ->
+            case authorize_message(conn, params["id"]) do
+              :ok ->
+                render conn, :show, page: find_message(params["id"])
+              :error ->
+                conn |> put_flash(:info, "Não tem permissão para acessar a página") |> redirect(to: "/")
+            end
+        end
+      :error ->
+        conn |> put_flash(:info, "Precisa está logado") |> redirect(to: "/")
+    end
+  end
+end
+```
+
+Para produzir poucas etapas de autorização e autenticação, foi exigido aninhamentos e duplicações um pouco complicadas. Agora usaremos o Plug de função para fazer a mesma coisa.
+
+```elixir
+defmodule AppWeb.MessageController do
+  use AppWeb, :controller
+
+  plug :authenticate
+  plug :fetch_message
+  plug :authorize_message
+
+  def show(conn, params) do
+    render conn, :show, page: find_message(params["id"])
+  end
+
+  defp authenticate(conn, _) do
+    case Authenticator.find_user(conn) do
+      {:ok, user} ->
+        assign(conn, :user, user)
+      :error ->
+        conn |> put_flash(:info, "Precisa está logado") |> redirect(to: "/") |> halt()
+    end
+  end
+
+  defp fetch_message(conn, _) do
+    case find_message(conn.params["id"]) do
+      nil ->
+        conn |> put_flash(:info, "A mesagem não foi encontrada") |> redirect(to: "/") |> halt()
+      message ->
+        assign(conn, :message, message)
+    end
+  end
+
+  defp authorize_message(conn, _) do
+    if Authorizer.can_access?(conn.assigns[:user], conn.assigns[:message]) do
+      conn
+    else
+      conn |> put_flash(:info, "Não tem permissão para acessar a página") |> redirect(to: "/") |> halt()
+    end
+  end
+end
+```
+
+Assim obtemos a mesma funcionalidade de uma maneira muito mais composta, clara e reutilizável.
+
+### Plug de módulo
+
+Esse nos permite definir uma transformação de conexão em um módulo. Para isso o módulo necessita implementar duas funções:
+
+`init/1` que inicialia quaisquer argumentos ou opções a serem passados para call/2;
+`call/2` que realiza a transformação da conexão. O mesmo é um plug de função.
+
+Veremos um exemplo de plug de módulo, que coloque a `:locale` chave e o valor na atribuição de conexão para uso downstream em outros plus, ações do controlador e nossas visualizações.
+
+```elixir
+defmodule AppWeb.Plugs.Locale do
+  import Plug.Conn
+
+  @locales ["en", "fr", "de"]
+
+  def init(default), do: default
+
+  def call(%Plug.Conn{params: %{"locale" => loc}} = conn, _default) when loc in @locales do
+    assign(conn, :locale, loc)
+  end
+
+  def call(conn, default), do: assign(conn, :locale, default)
+end
+
+defmodule AppWeb.Router do
+  use AppWeb, :router
+
+  pipeline :browser do
+    plug :accepts, ["html"]
+    plug :fetch_session
+    plug :fetch_flash
+    plug :protect_from_forgery
+    plug :put_secure_browser_headers
+    plug AppWeb.Plugs.Locale, "en"
+  end
+  ...
+```
+
+Podemos adicionar este plug de módulo ao nosso pipeline de navegador via `plug AppWeb.Plugs.Locale, "en"`. No `init/1` retorno de chamada, passamos uma localidade padrão para usar se nenhum estiver presente nos parâmetros. Também usamos a correspondência de padrões para definir várias `call/2` cabeças de função para validar a localidade nos parâmetros e voltar para "en" se não houver correspondência.
 
 ## Ecto
