@@ -73,9 +73,94 @@ Se observar dentro do bloco de `scope` temos nossa primeira rota real:
 get "/", PageController, :index
 ```
 
-`Get` é uma macro Phoenix que se extende para definir uma cláusula da match/5função. Corresponde ao verbo HTTP GET. Macros semelhantes existem para outros verbos HTTP, incluindo POST, PUT, PATCH, DELETE, OPÇÕES,CONNECT, TRACE e HEAD.
+`Get` é uma macro Phoenix que se extende para definir uma cláusula da função match/5. Corresponde ao verbo HTTP GET. Macros semelhantes existem para outros verbos HTTP, incluindo POST, PUT, PATCH, DELETE, OPÇÕES,CONNECT, TRACE e HEAD.
 
 A macro acima tem como primeiro argumento `"/"`, esse é o caminho da raiz da aplicação. Os outros dois argumentos são o `controller` e a ação, que queremos manusear nessa solicitação.
+
+**Averiguando Router**
+
+O Phoenix tem uma ferramenta para analisar rotas em um aplicativo, através do comando `phx.routes`. Seu funcionamento basíco é da seguinte forma. Precisa ir na raiz do aplicativo e executar `mix phx.routes`.
+
+Obs.: Caso não tenha feito isso, é preciso executar `mix do deps.get, compile` antes de executar a tarefa `routes`. Será visto um resultado parecido com esse:
+
+```elixir
+
+$ mix phx.routes
+page_path  GET  /  AppWeb.PageController :index
+```
+
+A saída quer dizer que qualquer comunicação HTTP GET para a raiz do aplicativo será manipulado pela `index` ação do `AppWeb.PageController`. O `page_path` funciona como um ajudante de trajetória.
+
+**Recursos**
+
+Além das macros get, post e put, existe o `resoucer` que expande para oito claúsulas da função match/5. Para testar adcionamos no arquivo `router.ex` a seguinte linha `resources "/users", UserController`.
+
+```elixir
+
+scope "/", AppWeb do
+  pipe_through :browser # Use the default browser stack
+
+  get "/", PageController, :index
+  resources "/users", UserController
+end
+```
+
+Em seguida vonte para a raiz da aplicação e digite `mix phx.routes`, aparecerá algo como:
+
+```elixir
+
+user_path  GET     /users           AppWeb.UserController :index
+user_path  GET     /users/:id/edit  AppWeb.UserController :edit
+user_path  GET     /users/new       AppWeb.UserController :new
+user_path  GET     /users/:id       AppWeb.UserController :show
+user_path  POST    /users           AppWeb.UserController :create
+user_path  PATCH   /users/:id       AppWeb.UserController :update
+           PUT     /users/:id       AppWeb.UserController :update
+user_path  DELETE  /users/:id       AppWeb.UserController :delete
+```
+
+Caso não queira todas as rotas pode selecionar as desejadas com a `:only` e `except`.
+
+**Only**
+
+```elixir
+resources "/posts", PostController, only: [:index, :show]
+```
+
+Temos rotas somente para leitura. Ao fazer a analise de rota com o comando `phx.routes`, temos rotas para o indice e mostrar as ações definidas.
+
+```elixir
+post_path  GET     /posts      AppWeb.PostController :index
+post_path  GET     /posts/:id  AppWeb.PostController :show
+```
+
+**except**
+
+Caso fosse criar um recurso de comentários, e não quisesse fornecer a rota para excluir, a rota seria dessa forma:
+
+```elixir
+resoucer "/coments", ComentController, except: [:delete]
+```
+
+Ao rodar o comando `phx.routes` teriamos um resultado parecido com esse:
+
+```elixir
+comment_path  GET    /comments           AppWeb.CommentController :index
+comment_path  GET    /comments/:id/edit  AppWeb.CommentController :edit
+comment_path  GET    /comments/new       AppWeb.CommentController :new
+comment_path  GET    /comments/:id       AppWeb.CommentController :show
+comment_path  POST   /comments           AppWeb.CommentController :create
+comment_path  PATCH  /comments/:id       AppWeb.CommentController :update
+              PUT    /comments/:id       AppWeb.CommentController :update
+```
+
+Em rotas tem muitas outras ações que podem ser feitas como: Forward, Path Helpers, Nested Resources, Scoped Routes, Pipelines e Channel Routes. Caso queira saber mais sobre estes que citamos aqui consulte o guia no site oficial Phoenix. Iremos falar sobre o Channel routes.
+
+**Rota do canal**
+
+Ela tem como função básica corresponder aos pedidos por soquete e tópico para enviar ao canal correto. Canais são componentes Phoenix que tratam questões em tempo real, manipulam mensagens de entrada e saída transmitida por um soket para um determinado tópico. Mais a frente falaremos detalhadamente de canais, agora vamos ver como a rota do canal funciona.
+
+
 
 ## Plug
 
