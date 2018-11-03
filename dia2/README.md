@@ -310,10 +310,10 @@ Assim obtemos a mesma funcionalidade de uma maneira muito mais composta, clara e
 
 ### Plug de módulo
 
-Esse nos permite definir uma transformação de conexão em um módulo. Para isso o módulo necessita implementar duas funções:
+Esse nos permite definir uma transformação de conexão em um módulo. Para isso o módulo necessita implementar duas funções: 
 
-`init/1` que inicialia quaisquer argumentos ou opções a serem passados para call/2;
-`call/2` que realiza a transformação da conexão. O mesmo é um plug de função.
+`init/1` que inicializa quaisquer argumentos ou opções a serem passados para call/2; 
+`call/2` que realiza a transformação da conexão. O mesmo é um plug de função. 
 
 Veremos um exemplo de plug de módulo, que coloque a `:locale` chave e o valor na atribuição de conexão para uso downstream em outros plus, ações do controlador e nossas visualizações.
 
@@ -347,5 +347,154 @@ defmodule AppWeb.Router do
 ```
 
 Podemos adicionar este plug de módulo ao nosso pipeline de navegador via `plug AppWeb.Plugs.Locale, "en"`. No `init/1` retorno de chamada, passamos uma localidade padrão para usar se nenhum estiver presente nos parâmetros. Também usamos a correspondência de padrões para definir várias `call/2` cabeças de função para validar a localidade nos parâmetros e voltar para "en" se não houver correspondência.
+
+## Endpoints
+
+Tem como função tratar as solicitações até o ponto que o roteador assume, o mesmo envia solicitações para um determinado roteador. É o início e o fim do ciclo de vida da solicitação. 
+
+A aplicação inicia o `AppWeb.Endpoint` como um processo supervisionado. O Endpoint é adicionado à árvore de supervisão `lib/app/aplication.ex`, cada solicitação inicia e termina seu ciclo de vida dentro do aplicativo em um nó de extermidade. O nó lida com o início do servidor Web e a transformação de solicitações por meio de vários plugues definidos antes de chamar o roteador.
+```elixir
+defmodule App.Application do
+  use Application
+  def start(_type, _args) do
+    #...
+
+    children = [
+      supervisorAppWeb.Endpoint, []),
+    ]
+
+    opts = [strategy: :one_for_one, name: App.Supervisor]
+    Supervisor.start_link(children, opts)
+  end
+end
+```
+
+### Conteúdo do Endpoint
+
+Os pontos de extremidade reúnem funcionalidades comuns e servem como entrada e saída para todas as solicitações HTTP para seu aplicativo.
+
+Iremos verificar o Endpoint da aplicação que será desenvolvida no último dia do curso.
+
+```elixir
+defmodule ChatWeb.Endpoint do
+  use Phoenix.Endpoint, otp_app: :chat
+
+  socket "/socket", ChatWeb.UserSocket
+
+  # Serve at "/" the static files from "priv/static" directory.
+  #
+  # You should set gzip to true if you are running phoenix.digest
+  # when deploying your static files in production.
+  plug Plug.Static,
+    at: "/", from: :chat, gzip: false,
+    only: ~w(css fonts images js favicon.ico robots.txt)
+
+  # Code reloading can be explicitly enabled under the
+  # :code_reloader configuration of your endpoint.
+  if code_reloading? do
+    socket "/phoenix/live_reload/socket", Phoenix.LiveReloader.Socket
+    plug Phoenix.LiveReloader
+    plug Phoenix.CodeReloader
+  end
+
+  plug Plug.Logger
+
+  plug Plug.Parsers,
+    parsers: [:urlencoded, :multipart, :json],
+    pass: ["*/*"],
+    json_decoder: Poison
+
+  plug Plug.MethodOverride
+  plug Plug.Head
+
+  # The session will be stored in the cookie and signed,
+  # this means its contents can be read but not tampered with.
+  # Set :encryption_salt if you would also like to encrypt it.
+  plug Plug.Session,
+    store: :cookie,
+    key: "_chat_key",
+    signing_salt: "ydEpUkQF"
+
+  plug ChatWeb.Router
+
+  @doc """
+  Callback invoked for dynamically configuring the endpoint.
+
+  It receives the endpoint configuration and checks if
+  configuration should be loaded from the system environment.
+  """
+  def init(_key, config) do
+    if config[:load_from_system_env] do
+      port = System.get_env("PORT") || raise "expected the PORT environment variable to be set"
+      {:ok, Keyword.put(config, :http, [:inet6, port: port])}
+    else
+      {:ok, config}
+    end
+  end
+end
+```
+
+A primeira chamada dentro do nosso módulo Endpoint é `use Phoenix.Endpointmacro` com o `otp_app`. O `otp_app` é usado para a configuração. Isso define várias funções no módulo `ChatWeb.Endpoint`, incluindo a função `start_link` que é chamada na árvore de supervisão.
+
+```elixir
+use Phoenix.Endpoint, otp_app: :chat
+```
+
+Depois, o nó de extremidade declara um soquete no URI "/soket". Sendo que as solicitações do soquete serão tratadas por `ChatWeb.UserSocket`, esse módulo se encontra em outro lugar na aplicação. Até esse momento foi declarado que a conexão existirá.
+
+```elixir
+socket "/socket", ChatWeb.UserSocket
+```
+
+Em seguida uma série de plugues que são relevantes para as solicitações da aplicação. Pode personalizar alguns dos recursos. Um deles é o `gzip`, se habilitar `gzip: true`, os arquivos estáticos seram compactados. Os arquivos estáticos são atendidos `priv/static` antes que qualquer parte de nossa solicitação chegue a um roteador.
+
+```elixir
+plug Plug.Static,
+    at: "/", from: :chat, gzip: false,
+    only: ~w(css fonts images js favicon.ico robots.txt)
+```
+
+Por padrão o recarregamento de código é ativo, o mesmo usa um soquete para comunicar ao navegador que a página precisa ser recarregada, quando o código for alterado no servidor.
+
+```elixir
+if code_reloading? do
+    socket "/phoenix/live_reload/socket", Phoenix.LiveReloader.Socket
+    plug Phoenix.LiveReloader
+    plug Phoenix.CodeReloader
+  end
+```
+
+O `Plug.Logger`registra o caminho da solicitação, o código de atatus e a hora da solicitação.
+
+O `Plug.Session` manipula os cookies de sessão e os armazenamentos de sessão.
+
+```elixir
+plug Plug.Session,
+    store: :cookie,
+    key: "_chat_key",
+    signing_salt: "ydEpUkQF"
+```
+
+E o último plug é o roteador `plug ChatWeb.Router`, que corresponde a um caminho para uma determinada ação ou plug do controlador. O nó de extremidade pode ser personalizado para adicionar plugues, para permitir autenticação básica HTTP, CORS, roteamento de subdomínio e outras coisas mais.
+
+Por fim a função `init` gerada por padrão no nó de extremidade. Usada para configuração dinâmica, retornando chamada.
+
+```elixir
+
+ef init(_key, config) do
+    if config[:load_from_system_env] do
+      port = System.get_env("PORT") || raise "expected the PORT environment variable to be set"
+      {:ok, Keyword.put(config, :http, [:inet6, port: port])}
+    else
+      {:ok, config}
+    end
+  end
+```
+
+As falhas nas diferentes partes da árvore de supervisão, como o Ecto Repo, não afetarão imediatamente a aplicação principal. O supervisor é, portanto, capaz de reiniciar esses processos separadamente após falhas inesperadas. Também é possível que um aplicativo tenha vários pontos de extremidade, cada um com sua própria árvore de supervisão.
+
+## Controllers
+
+Atuam como módulos intermediários. Suas funções, denominadas como ações, 
 
 ## Ecto
