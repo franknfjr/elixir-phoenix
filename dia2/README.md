@@ -495,6 +495,39 @@ As falhas nas diferentes partes da árvore de supervisão, como o Ecto Repo, nã
 
 ## Controllers
 
-Atuam como módulos intermediários. Suas funções, denominadas como ações, 
+Atuam como módulos intermediários. Suas funções, denominadas como ações, são chamadas do roteador em resposta a solicitação HTTP. As mesmas reúnem todos os dados necessários e executam todas as etapas necessárias antes de invocar a camada de visualização para renderizar ou retornar uma resposta JSON.
+
+Ao gerar um aplicativo Phoenix, o mesmo terá um único controlador, localiza em `lib/app_web/controller/page_controller.ex`.
+
+```elixir
+defmodule AppWeb.PageController do
+  use AppWeb, :controller
+
+  def index(conn, _params) do
+    render conn, "index.html"
+  end
+end
+```
+
+A primeira linha abaixo da definição do módulo chama a `__using__/1` macro do AppWeb módulo, que importa alguns módulos úteis.
+
+O `PageController` nos dá a ação index, para exibir a página de boas-vindas do Phoenix associado com a rota padrão definida no roteador.
+
+Existem convenções para nomes de ação que é recomendado seguir sempre que possível, embora possa criar qualquer nome para uma ação.
+
+* index - renderiza uma lista de todos os itens do tipo de recurso fornecido;
+* show - renderiza um item individual por id;
+* novo - processa um formulário para criar um novo item;
+* criar - recebe parâmetros para um novo item e os salva em um armazenamento de dados;
+* edit - recupera um item individual por id e o exibe em um formulário para edição;
+* update - recebe parâmetros para um item editado e salva em um armazenamento de dados;
+* delete - recebe um id para um item a ser excluído e o exclui de um armazenamento de dados;
+
+Observe no código acima que a ação usa dois `conn`e `params` parametros, que são fornecidos pela Phoenix nos bastidores.
+
+O primeiro é sempre o **conn**, ele trás informações sobre o pedido, como o host, elementos de caminho, porta, cadeia de consulta e outras. 
+
+O segundo **params**, é um mapa que compõe todos os parâmetros transmitidos na solicitação HTTP.
+
 
 ## Ecto
