@@ -525,9 +525,77 @@ Existem convenções para nomes de ação que é recomendado seguir sempre que p
 
 Observe no código acima que a ação usa dois `conn`e `params` parametros, que são fornecidos pela Phoenix nos bastidores.
 
-O primeiro é sempre o **conn**, ele trás informações sobre o pedido, como o host, elementos de caminho, porta, cadeia de consulta e outras. 
+O primeiro é sempre o **conn**, ele trás informações sobre o pedido, como o host, elementos de caminho, porta, cadeia de consulta e outras.
 
-O segundo **params**, é um mapa que compõe todos os parâmetros transmitidos na solicitação HTTP.
+O segundo **params**, é um mapa que compõe todos os parâmetros transmitidos na solicitação HTTP. É uma boa prática padronizar a correspondência com parâmetros na assinatura da função para fornecer dados em um pacote simples que podemos transmitir para renderização. Exemplo ao adicionar um parâmetro de mensagem em nossa `show` rota `lib/app_web/controllers/app_controller.ex`. 
 
+```elixir
+defmodule AppWeb.AppController do
+  . . .
+
+  def show(conn, %{"messenger" => messenger}) do
+    render conn, "show.html", messenger: messenger
+  end
+end
+```
+
+Tem casos de ações que precisa se importar com parâmetros, pois o comportamento não depende deles. Como pode ser observado na `index`, simplesmente o parâmetro foi prefixado com um sublinhado. Isso faz com que o compilador não se queixe da variável não utilizada, mantendo a aridade correta.
+
+### Mensagens Flash
+
+Tem momentos que aplicação precisa se comunicar com os usuários durante o percurso de uma ação. Para isso no módulo `Phoenix.Controller` temos duas funções a `put_flash/3` e `get_flash/2`, elas ajudam a definir e recuperar mensagens flash no nosso `AppWeb.PageController`. Segue um exemplo de como nossa `index` ficaria.
+
+```elixir
+defmodule AppWeb.PageController do
+  . . .
+  def index(conn, _params) do
+    conn
+    |> put_flash(:info, "Bem-vindo ao Phoenix, da informação de flash!")
+    |> put_flash(:error, "Vamos fingir que temos um erro.")
+    |> render("index.html")
+  end
+end
+```
+
+Para ver as mensagens flash, tem que recuperá-las e exibi-las em um template. Uma maneira de fazer a primeira parte é com o `get_flash/2` que toma `conn` e a chave com que nos importamos. Em seguida, retorna o valor para essa chave.
+
+Mas o nosso layout de aplicativo `lib/app_web/templates/layout/app.html.eex`, já possui marcação para exibir mensagens flash.
+
+```elixir
+<p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
+<p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
+```
+
+Além das funções acima, o `Phoenix.Controller` módulo tem outra função útil, a `clear_flash/1` leva apenas `conn` e remove quaisquer mensagens flash que possam ser armazenadas na sessão.
+
+### Renderização
+
+A forma mais simples de renderizar algum texto é a função `text/2` que o Phoenix fornece.
+
+Enunciamos que temos uma ação `show` que rece um id do mapa `params`, e precisamos retornar um texto qualquer com o id.
+
+```elixir
+def show(conn, %{"id" => id}) do
+  text conn, "O id é #{id}"
+end
+```
+
+Imagine uma rota mapear essa ação `get "/id_e/:id"`, ao ir para o `/id_e/20` seu navegador deve ser exibido `O id é 20` com texto simples sem qualquer HTML.
+
+Podemo renderizar JSON puro também com a função `json/2`.
+
+```elixir
+def show(conn, %{"id" => id}) do
+  json conn, %{id: id}
+end
+```
+
+Ao visitar `/id_e/20` no navegador, será exibido um bloco JSON com a chave `id`.
+
+```elixir
+{"id": "20"}
+```
+
+Temos muito mais coisas sobre controller, caso queira aprender mais consulte o guia do phoenix framework.
 
 ## Ecto
