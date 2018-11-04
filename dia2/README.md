@@ -598,4 +598,47 @@ Ao visitar `/id_e/20` no navegador, será exibido um bloco JSON com a chave `id`
 
 Temos muito mais coisas sobre controller, caso queira aprender mais consulte o guia do phoenix framework.
 
+## Views
+
+As views do Phoenix tem dois principais trabalhos. A primeira é redenrizar arquivos que estão no templates. E também fornece funções que levam dados brutos e facilitam o consumo. `render/3` é a principal função que envolve a renderização.
+
+### Modelos de renderização
+
+A convenção de nomenclatura dos controladores para os modelos que eles renderizam é forte. O `PageControlller` requer um `PageView` para renderizar no diretório `lib/app_web/templates/page`. A raiz do template considerado pelo Phoenix, pode ser alterada. Ele oferece uma função `view/0` no módulo `AppWeb` localizado em `lib/app_web.ex`. A primeira linha da função `view/0` nos autoriza mudar o diretório raiz modificando o valor da chave `:root`.
+
+```elixir
+use Phoenix.View, root: "lib/chat_web/templates",
+                        namespace: ChatWeb
+```
+
+Iremos verificar o `LayoutView`.
+
+```elixir
+defmodule ChatWeb.LayoutView do
+  use ChatWeb, :view
+end
+```
+
+Esse módulo tem apenas uma linha, que chama a função `view/0` a mesma exercita a macro `__using__` no `Phoenix.View`. Ela trata qualquer importação de módulo ou aliases. Que os módulos de visualização da aplicação possa necessitar.
+
+Agora iremos abrir nosso modelo de layout de aplicativo `lib/app_web/templates/layout/app.html.exx` e alterar a seguinte linha.
+
+```elixir
+<title>Hello Hello!</title>
+```
+
+Vamos adcionar uma função `title/0` ao nosso `LayoutView`.
+
+```elixir
+defmodule AppWeb.LayoutView do
+  use AppWeb, :view
+
+  def title do
+    "Um novo título!"
+  end
+end
+```
+
+Ao recarregar a página do Welcome to Phoenix, veremos nosso novo título.
+
 ## Ecto
