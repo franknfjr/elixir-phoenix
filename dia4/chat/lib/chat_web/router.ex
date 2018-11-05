@@ -17,7 +17,7 @@ defmodule ChatWeb.Router do
     # Use the default browser stack
     pipe_through(:browser)
 
-    get("/", PageController, :index)
+    resources("/", RoomController)
   end
 
   # Other scopes may use custom stacks.
