@@ -641,4 +641,135 @@ end
 
 Ao recarregar a página do Welcome to Phoenix, veremos nosso novo título.
 
+Como a `view/0` função é importada `AppWeb.Router.Helpers`, não precisamos qualificar totalmente os auxiliares de caminho nos modelos. Vamos ver como isso funciona alterando o modelo para a nossa página Welcome to Phoenix.
+
+Vamos abrir `lib/hello_web/templates/page/index.html.eexe` localizar essa parte do código.
+
+```elixir
+<div class="jumbotron">
+  <h2><%= gettext "Welcome to %{name}!", name: "Phoenix" %></h2>
+  <p class="lead">A productive web framework that<br>does not compromise speed and maintainability.</p>
+</div>
+```
+
+Agora vamos adcionar um link que volta para a mesma página. Iremos ver como os auxiliares de caminho respodem em um modelo, sem precisar adicionar nenhuma funcionalidade.
+
+```elixir
+<div class="jumbotron">
+  <h2><%= gettext "Welcome to %{name}!", name: "Phoenix" %></h2>
+  <p class="lead">A productive web framework that<br>does not compromise speed and maintainability.</p>
+  <p><a href="<%= page_path @conn, :index %>">Link back to this page</a></p>
+</div>
+```
+
+Agora revifique o código fonte no seu navegador e veja o que temos.
+
+Ótimo, `page_path/2` avaliado `/` como é de se esperar, e não precisávamos nos qualificar Phoenix.View.
+
+## Renderização JSON
+
+O trabalho da visão não é apenas renderizar modelos HTML. Visualizações são sobre apresentação de dados. Dado um pacote de dados, o objetivo da exibição é apresentar isso de maneira significativa, considerando algum formato, seja HTML, JSON, CSV ou outros.
+
+É possível responder com JSON diretamente do controlador e pular a Visualização. No entanto, se pensarmos em um controlador como tendo as responsabilidades de receber uma solicitação e buscar dados a serem enviados de volta, a manipulação e a formatação de dados não se enquadram nessas responsabilidades. Uma visão nos dá um módulo responsável por formatar e manipular os dados. Vamos `PageController` ver o que pode parecer quando respondemos com alguns mapas de páginas estáticos como JSON, em vez de HTML.
+
+```elixir
+defmodule AppWeb.PageController do
+  use AppWeb, :controller
+
+  def show(conn, _params) do
+    page = %{title: "JSON"}
+
+    render conn, "show.json", page: page
+  end
+
+  def index(conn, _params) do
+    pages = [%{title: "JSON"}, %{title: "DATA"}]
+
+    render conn, "index.json", pages: pages
+  end
+end
+```
+
+Temos as ações `show/2` e `index/2` retornando dados de página estáticas. Em vez de passar `show.html` para `render/3` o nome do modelo, `show.json`. Dessa forma, podemos ter visões responsáveis ​​por renderizar HTML e JSON por correspondência de padrões em diferentes tipos de arquivos.
+
+```elixir
+defmodule AppWeb.PageView do
+  use AppWeb, :view
+
+  def render("index.json", %{pages: pages}) do
+    %{data: render_many(pages, AppWeb.PageView, "page.json")}
+  end
+
+  def render("show.json", %{page: page}) do
+    %{data: render_one(page, AppWeb.PageView, "page.json")}
+  end
+
+  def render("page.json", %{page: page}) do
+    %{title: page.title}
+  end
+end
+```
+
+Na `View` o padrão de função  `render/2` correspondente em `index.json`, `show.json` e `page.json`. Em nossa função `show/2` de controlador, `render conn, "show.json", page: page` o padrão será igual ao nome e extensão correspondentes nas funçõa `render/2` da `View`. Em outras palavras, `render conn, "index.json", pages: pages` vai ligar `render("index.json", %{pages: pages})`. A função `render_many/3` pega os dados que queremos responder com `(pages)`, a `View` e uma string para correspondência de padrões na função `render/2` definida em `View`. Ele mapeará cada item `pages` e passará o item para a função `render/2` `View` correspondente à cadeia de arquivos. `render_one/3` Segue, a mesma assinatura, em última análise, usando a `render/2` correspondência `page.json` para especificar o que cada um `page` parece. A `render/2` correspondência `"index.json"` responderá com JSON como você esperaria:
+
+```elixir
+  {
+    "data": [
+      {
+       "title": "JSON"
+      },
+      {
+       "title": "DATA"
+      },
+   ]
+  }
+```
+
+A função `render/2` correspondência `show.json`.
+
+```elixir
+  {
+    "data": {
+      "title": "JSON"
+    }
+  }
+```
+
+É útil construir nossos pontos de vista como este, para que possam ser compostos. Imagine uma situação em que o nosso relacionamento `Page` esteja `has_many` relacionado e `Author`, dependendo da solicitação, possamos enviar dados `author` com o `page`. Podemos facilmente conseguir isso com um novo `render/2`:
+
+```elixir
+defmodule AppWeb.PageView do
+  use AppWeb, :view
+  alias AppWeb.AuthorView
+
+  def render("page_with_authors.json", %{page: page}) do
+    %{title: page.title,
+      authors: render_many(page.authors, AuthorView, "author.json")}
+  end
+
+  def render("page.json", %{page: page}) do
+    %{title: page.title}
+  end
+end
+```
+
+O nome usado nas atribuições é determinado a partir da exibição. Por exemplo, o `PageView` vai usar `%{page: page}` e o `AuthorView` o `%{author: author}`. Isso pode ser substituído com a `as` opção. Vamos supor que a visualização do autor seja usada em `%{writer: writer}` em vez de `%{author: author}`:
+
+```elixir
+  def render("page_with_authors.json", %{page: page}) do
+    %{title: page.title,
+      authors: render_many(page.authors, AuthorView, "author.json", as: :writer)}
+  end
+```
+
+## Templates
+
+São arquivos onde passamos dados para formar resposta HTTP completas. Em uma plicação Web, essas seriam documetno HTML completos. Para api's "JSON" ou "XML". No Phoenix os `templates` são pré-compilados, fato que os torna muito rápidos.
+
+EEx é o sistema de template padrão em Phoenix, e é bastante similar ao ERB em Ruby. Na verdade, é parte do próprio Elixir, e o Phoenix usa modelos EEx para criar arquivos como o roteador e a visualização principal do aplicativo ao gerar um novo aplicativo.
+
+Eles estão localizados no diretório `lib/app_web/templates`, cada uma possui seu próprio módulo na `View` para renderizar os modelo nele.
+
+**Exemplos**
+
 ## Ecto
