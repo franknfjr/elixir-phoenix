@@ -5,13 +5,13 @@
     </div>
 
     <div class="form-label-group">
-      <%= label f, :email, "Email address", class: "control-label" %>
       <%= text_input f, :email, class: "form-control", placeholder: "Email", required: true, autofocus: true %>
+      <%= label f, :email, "Email address", class: "control-label" %>
     </div>
 
     <div class="form-label-group">
-      <%= label f, :password, class: "control-label" %>
       <%= password_input f, :password, class: "form-control", placeholder: "Password", required: true %>
+      <%= label f, :password, class: "control-label" %>
     </div>
     <br>
     <%= submit "Sign in", class: "btn btn-lg btn-primary btn-block" %>
