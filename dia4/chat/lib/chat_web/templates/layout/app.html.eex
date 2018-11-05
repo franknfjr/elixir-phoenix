@@ -21,7 +21,18 @@
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="/">Chat</a>
+            <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
+            <h5 class="my-0 mr-md-auto font-weight-normal">
+              <a href="/" class="navbar-brand text-dark"><strong>Chat</strong></a>
+            </h5>
+              <%= if Chat.Auth.user_signed_in?(@conn) do %>
+                <nav class="my-2 my-md-0 mr-md-3">
+                  Signed in as: <strong><%= Chat.Auth.current_user(@conn).username %></strong>
+                </nav>
+                <%= link "Sign Out", to: session_path(@conn, :delete), method: :delete, class: "btn btn-outline-primary" %>
+              <% end %>
+          </div>
+
           </div>
         </div>
       </div>
