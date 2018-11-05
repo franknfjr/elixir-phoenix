@@ -1,6 +1,8 @@
 defmodule ChatWeb.SessionController do
   use ChatWeb, :controller
 
+  alias Chat.Auth
+
   def new(conn, _params) do
     render(conn, "new.html")
   end
