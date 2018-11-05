@@ -3,9 +3,9 @@
 
 // To use Phoenix channels, the first step is to import Socket
 // and connect at the socket path in "lib/web/endpoint.ex":
-import {Socket} from "phoenix"
+import { Socket } from "phoenix";
 
-let socket = new Socket("/socket", {params: {token: window.userToken}})
+let socket = new Socket("/socket", { params: { token: window.userToken } });
 
 // When you connect, you'll often need to authenticate the client.
 // For example, imagine you have an authentication plug, `MyAuth`,
@@ -51,12 +51,41 @@ let socket = new Socket("/socket", {params: {token: window.userToken}})
 // Finally, pass the token on connect as below. Or remove it
 // from connect if you don't care about authentication.
 
-socket.connect()
+socket.connect();
 
-// Now that you are connected, you can join channels with a topic:
-let channel = socket.channel("topic:subtopic", {})
-channel.join()
-  .receive("ok", resp => { console.log("Joined successfully", resp) })
-  .receive("error", resp => { console.log("Unable to join", resp) })
+let channelRoomId = window.channelRoomId;
+if (channelRoomId) {
+  // Now that you are connected, you can join channels with a topic:
+  let channel = socket.channel(`room:${channelRoomId}`, {});
+  channel
+    .join()
+    .receive("ok", resp => {
+      console.log("Joined successfully", resp);
+    })
+    .receive("error", resp => {
+      console.log("Unable to join", resp);
+    });
 
-export default socket
+  channel.on(`room:${channelRoomId}:new_message`, message => {
+    console.log("message", message);
+    renderMessage(message);
+  });
+
+  document.querySelector("#new-message").addEventListener("submit", e => {
+    e.preventDefault();
+    let messageInput = e.target.querySelector("#message-content");
+    channel.push("message:add", { message: messageInput.value });
+    messageInput.value = "";
+  });
+}
+const renderMessage = (message) => {
+  let messageTemplate = `
+    <li class="list-group-item">
+      <strong>${message.user.username}</strong>:
+      ${message.content}
+    </li>
+  `;
+  document.querySelector("#messages").innerHTML += messageTemplate;
+};
+
+export default socket;
