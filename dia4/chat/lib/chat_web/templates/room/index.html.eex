@@ -1,0 +1,22 @@
+<div class="row">
+  <div class="col-md-3">
+    <h3>Rooms</h3>
+    <ul class="list-group">
+      <%= for room <- @rooms do %>
+        <li class="list-group-item"><%= room.name %></li>
+      <% end %>
+    </ul>
+  </div>
+  <div class="col-md-9">
+    <div class="jumbotron">
+      <div class="page-header">
+        <h2><%= gettext "Welcome to %{name}!", name: "Chat" %></h2>
+      </div>
+      <div class="page-header">
+        <p class="lead">Construindo um chat em tempo real com <br />Phoenix Framework.</p>
+        <h2><small>Escolha uma sala</small></h2>
+        <h2><small>ou <a href="" class="btn btn-success">Crie</a> uma nova</small></h2>
+      </div>
+    </div>
+  </div>
+</div>
