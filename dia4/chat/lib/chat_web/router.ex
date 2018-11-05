@@ -18,6 +18,8 @@ defmodule ChatWeb.Router do
     pipe_through(:browser)
 
     resources("/", RoomController)
+
+    resources("/sessions", SessionController, only: [:new, :create])
   end
 
   # Other scopes may use custom stacks.
