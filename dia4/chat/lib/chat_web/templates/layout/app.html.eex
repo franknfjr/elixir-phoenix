@@ -17,9 +17,9 @@
       <h5 class="my-0 mr-md-auto font-weight-normal">
         <a href="/" class="navbar-brand text-dark"><strong>Chat</strong></a>
       </h5>
-      <%= if Chat.Auth.user_signed_in?(@conn) do %>
+      <%= if @user_signed_in? do %>
         <nav class="my-2 my-md-0 mr-md-3">
-          Signed in as: <strong><%= Chat.Auth.current_user(@conn).username %></strong>
+          Signed in as: <strong><%= @current_user.username %></strong>
         </nav>
         <%= link "Sign Out", to: session_path(@conn, :delete), method: :delete, class: "btn btn-outline-primary" %>
       <% else %>
