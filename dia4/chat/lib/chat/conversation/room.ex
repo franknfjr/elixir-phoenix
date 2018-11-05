@@ -2,12 +2,11 @@ defmodule Chat.Conversation.Room do
   use Ecto.Schema
   import Ecto.Changeset
 
-
   schema "rooms" do
-    field :desc, :string
-    field :name, :string
-    field :topic, :string
-
+    field(:desc, :string)
+    field(:name, :string)
+    field(:topic, :string)
+    belongs_to(:user, Chat.Auth.User)
     timestamps()
   end
 

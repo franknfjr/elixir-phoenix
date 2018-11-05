@@ -10,6 +10,7 @@ defmodule Chat.Auth.User do
     field(:username, :string)
     field(:password, :string, virtual: true)
     field(:password_confirmation, :string, virtual: true)
+    has_many(:rooms, Chat.Conversation.Room)
     timestamps()
   end
 

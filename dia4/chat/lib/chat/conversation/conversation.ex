@@ -49,8 +49,9 @@ defmodule Chat.Conversation do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_room(attrs \\ %{}) do
-    %Room{}
+  def create_room(user, attrs \\ %{}) do
+    user
+    |> Ecto.build_assoc(:rooms)
     |> Room.changeset(attrs)
     |> Repo.insert()
   end

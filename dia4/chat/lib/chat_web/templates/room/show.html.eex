@@ -19,5 +19,9 @@
 
 </ul>
 
-<span><%= link "Edit", to: room_path(@conn, :edit, @room) %></span>
-<span><%= link "Back", to: room_path(@conn, :index) %></span>
+<%= if Chat.Auth.Authorizer.can_manage?(@current_user, @room) do %>
+  <div>
+    <%= link "Edit", to: room_path(@conn, :edit, @room.id), class: "btn btn-default" %>
+    <%= link "Delete", to: room_path(@conn, :delete, @room), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger" %>
+  </div>
+<% end %>

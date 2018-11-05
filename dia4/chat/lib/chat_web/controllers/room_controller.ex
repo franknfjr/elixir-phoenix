@@ -3,6 +3,10 @@ defmodule ChatWeb.RoomController do
 
   alias Chat.Conversation
   alias Chat.Conversation.Room
+  alias Chat.Auth.Authorizer
+
+  plug(ChatWeb.Plugs.AuthenticateUser when action not in [:index])
+  plug(:authorize_user when action in [:edit, :update, :delete])
 
   def index(conn, _params) do
     rooms = Conversation.list_rooms()
@@ -15,11 +19,12 @@ defmodule ChatWeb.RoomController do
   end
 
   def create(conn, %{"room" => room_params}) do
-    case Conversation.create_room(room_params) do
+    case Conversation.create_room(conn.assigns.current_user, room_params) do
       {:ok, room} ->
         conn
         |> put_flash(:info, "Room created successfully.")
         |> redirect(to: room_path(conn, :show, room))
+
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
     end
@@ -44,6 +49,7 @@ defmodule ChatWeb.RoomController do
         conn
         |> put_flash(:info, "Room updated successfully.")
         |> redirect(to: room_path(conn, :show, room))
+
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", room: room, changeset: changeset)
     end
@@ -56,5 +62,19 @@ defmodule ChatWeb.RoomController do
     conn
     |> put_flash(:info, "Room deleted successfully.")
     |> redirect(to: room_path(conn, :index))
+  end
+
+  defp authorize_user(conn, _params) do
+    %{params: %{"id" => room_id}} = conn
+    room = Conversation.get_room!(room_id)
+
+    if Authorizer.can_manage?(conn.assigns.current_user, room) do
+      conn
+    else
+      conn
+      |> put_flash(:error, "You are not authorized to access that page")
+      |> redirect(to: room_path(conn, :index))
+      |> halt()
+    end
   end
 end
