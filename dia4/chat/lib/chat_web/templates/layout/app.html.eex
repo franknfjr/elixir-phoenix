@@ -1,49 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
-   <head>
-      <meta charset="utf-8">
-      <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-      <meta name="description" content="">
-      <meta name="author" content="">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-      <title>Hello Chat!</title>
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
-      <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
-   </head>
+    <title>Hello Chat!</title>
+    <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
+  </head>
 
-   <body>
-      <div class="container">
-         <header class="header">
-           <nav class="nav light-blue accent-4">
-             <div class="nav-wrapper">
-            <div class="nav-wrapper">
-              <a href="#!" class="brand-logo">Chat!</a>
-              <ul class="right hide-on-med-and-down">
-                <%= if Chat.Auth.user_signed_in?(@conn) do %>
-                <li>Signed in as: <strong> <%= @current_user.username %> </strong> </li>
-                <li> <%= link "Sign Out", to: session_path(@conn, :delete), method: :delete, class: "btn btn-outline-primary light-blue accent-3" %> </li>
-                <% else %>
-                <li> <%= link "Sign In", to: session_path(@conn, :new), class: "btn btn-outline-primary light-blue accent-3" %> </li>
-                <% end %>
-                <li> <%= link "Register", to: registration_path(@conn, :new), class: "btn btn-outline-primary light-blue accent-3" %> </li>
-              </ul>
-            </div>
-          </nav>
-         </header>
+  <body>
+    <div class="container">
+      <header class="header">
+        <nav role="navigation">
+          <ul class="nav nav-pills pull-right">
+            <li><a href="http://www.phoenixframework.org/docs">Get Started</a></li>
+          </ul>
+        </nav>
+        <span class="logo"></span>
+      </header>
 
-         <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
-         <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
+      <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
+      <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
 
-         <main role="main">
-            <%= render @view_module, @view_template, assigns %>
-         </main>
-      </div>
+      <main role="main">
+        <%= render @view_module, @view_template, assigns %>
+      </main>
 
-      <!-- /container -->
-      <script  src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
-      <script>window.userToken = "<%= assigns[:user_id] %>"</script>
-      <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
-   </body>
+    </div> <!-- /container -->
+    <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
+  </body>
 </html>

@@ -19,6 +19,7 @@ defmodule ChatWeb.Endpoint do
     plug Phoenix.CodeReloader
   end
 
+  plug Plug.RequestId
   plug Plug.Logger
 
   plug Plug.Parsers,
@@ -35,7 +36,7 @@ defmodule ChatWeb.Endpoint do
   plug Plug.Session,
     store: :cookie,
     key: "_chat_key",
-    signing_salt: "ydEpUkQF"
+    signing_salt: "r7pVr53e"
 
   plug ChatWeb.Router
 

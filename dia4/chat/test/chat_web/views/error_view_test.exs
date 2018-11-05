@@ -6,11 +6,16 @@ defmodule ChatWeb.ErrorViewTest do
 
   test "renders 404.html" do
     assert render_to_string(ChatWeb.ErrorView, "404.html", []) ==
-           "Not Found"
+           "Page not found"
   end
 
-  test "renders 500.html" do
+  test "render 500.html" do
     assert render_to_string(ChatWeb.ErrorView, "500.html", []) ==
-           "Internal Server Error"
+           "Internal server error"
+  end
+
+  test "render any other" do
+    assert render_to_string(ChatWeb.ErrorView, "505.html", []) ==
+           "Internal server error"
   end
 end

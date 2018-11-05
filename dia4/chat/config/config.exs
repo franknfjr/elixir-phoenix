@@ -12,7 +12,7 @@ config :chat,
 # Configures the endpoint
 config :chat, ChatWeb.Endpoint,
   url: [host: "localhost"],
-  secret_key_base: "Y4F9b7JMgyb+CEfMoKwGzlTIea07NM/dHLINPrF17xnmzH2RLk7/ypPZIJaELv7O",
+  secret_key_base: "Jt9MPgOSWjJ03AJlYU35tDdgDoAXkOnvnrdaDa0YU7UqRPMFVWKVq6Ar7trdbHCv",
   render_errors: [view: ChatWeb.ErrorView, accepts: ~w(html json)],
   pubsub: [name: Chat.PubSub,
            adapter: Phoenix.PubSub.PG2]
@@ -20,7 +20,7 @@ config :chat, ChatWeb.Endpoint,
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",
-  metadata: [:user_id]
+  metadata: [:request_id]
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

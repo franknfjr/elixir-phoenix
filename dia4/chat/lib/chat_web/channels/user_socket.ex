@@ -2,10 +2,10 @@ defmodule ChatWeb.UserSocket do
   use Phoenix.Socket
 
   ## Channels
-  channel("room:*", ChatWeb.RoomChannel)
+  # channel "room:*", ChatWeb.RoomChannel
 
   ## Transports
-  transport(:websocket, Phoenix.Transports.WebSocket)
+  transport :websocket, Phoenix.Transports.WebSocket
   # transport :longpoll, Phoenix.Transports.LongPoll
 
   # Socket params are passed from the client and can
@@ -21,16 +21,6 @@ defmodule ChatWeb.UserSocket do
   # performing token verification on connect.
   def connect(_params, socket) do
     {:ok, socket}
-  end
-
-  def connect(%{"token" => user_id_token}, socket) do
-    case Phoenix.Token.verify(socket, "user_id", user_id_token, max_age: 1_000_000) do
-      {:ok, user_id} ->
-        {:ok, assign(socket, :user_id, user_id)}
-
-      {:error, _reason} ->
-        :error
-    end
   end
 
   # Socket id's are topics that allow you to identify all sockets for a given user:
