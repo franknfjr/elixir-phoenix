@@ -17,7 +17,8 @@ defmodule ChatWeb.Router do
     # Use the default browser stack
     pipe_through(:browser)
 
-    resources("/", RoomController)
+    get("/", RoomController, :index)
+    resources("/rooms", RoomController)
 
     resources("/sessions", SessionController, only: [:new, :create])
   end
