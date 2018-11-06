@@ -435,7 +435,7 @@ Exercicios
 
 Some as opções que não funcionaram e de a resposta.
 
-### A variável "a" está vinculada ao valor 3. Qual das seguintes opções vai funcionar
+### A variável "a" está vinculada ao valor 2. Qual das seguintes opções vai funcionar
 
 1. [ a, b, a ] = [ 2, 4, 2 ]
 2. [ a, b, a ] = [ 2, 1, 4 ]
