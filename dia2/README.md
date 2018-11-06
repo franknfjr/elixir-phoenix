@@ -772,4 +772,14 @@ Eles estão localizados no diretório `lib/app_web/templates`, cada uma possui s
 
 **Exemplos**
 
+Vamos definir uma outra rota para exercitar um pouco. Vá em `lib/app_web/router.ex`. E crie uma rota teste.
+
+```elixir
+get "/teste", PageController, :teste
+```
+
+Vamos iniciar nossa aplicação `mix phx.server` e acessar nossa nova rota.
+
+
+
 ## Ecto
