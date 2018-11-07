@@ -1138,6 +1138,31 @@ end
 
 ## Context
 
+Antes era com model... Hoje temos o context.
+
+![alt Exemplo com model](https://cdn-images-1.medium.com/max/1200/1*9zM-5F5_RVAthQLbfQCABg.png)
+
+
+![alt Exemplo com context](https://cdn-images-1.medium.com/max/1200/1*yif8KdMpf4yB9BFbTLfQVw.png)
+
+Estrutura Context:
+```shell
+mix phx.gen.context Context Schema schemas
+```
+
+```shell
+$ mix phx.gen.context CMS Author authors bio:text role:string 
+genre:string user_id:references:users:unique
+
+* creating lib/hello/cms/author.ex
+* creating priv/repo/migrations/20170629200937_create_authors.exs
+* injecting lib/hello/cms/cms.ex
+* injecting test/hello/cms/cms_test.exs
+
+Remember to update your repository by running migrations:
+
+    $ mix ecto.migrate
+```
 ## Tarefas MIX
 
 É comum querer extender as funcionalidades da sua aplicação Elixir adicionando tarefas Mix customizadas. Antes de aprendermos como criar tarefas Mix específicas para nossos projetos, vamos dar uma olhada em uma já existente:
