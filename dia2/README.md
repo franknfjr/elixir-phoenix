@@ -1225,3 +1225,14 @@ O Mix é bastante amigável por padrão. Ele sabe que todos podem cometer um err
 $ mix hell
 ** (Mix) The task "hell" could not be found. Did you mean "hello"?
 ```
+
+Referências:
+
+Phoenix https://hexdocs.pm/phoenix/overview.html
+
+Ecto https://elixirschool.com/en/lessons/specifics/ecto/
+
+From Models to Context https://medium.com/adorableio/from-models-to-contexts-in-phoenix-1-3-0-1535d1d773b2
+
+Tarefas Mix Customizadas · Elixir School https://elixirschool.com/pt/lessons/basics/mix-tasks/
+
