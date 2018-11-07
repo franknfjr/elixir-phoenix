@@ -784,6 +784,8 @@ Vamos iniciar nossa aplicação `mix phx.server` e acessar nossa nova rota.
 
 ## Ecto
 
+Ecto é um projeto oficial do Elixir que fornece uma camada de banco de dados e linguagem integrada para consultas. Com Ecto podemos criar migrations, definir schemas, inserir e atualizar registos, e fazer consultas.
+
 ## Instalação
 
 Crie um novo app com uma supervision tree:
