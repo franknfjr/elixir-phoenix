@@ -913,8 +913,11 @@ Consiste no módulo `Phoenix.PubSub` e uma variedade de módulos para diferentes
 O módulo `Phoenix.Socket.Message` define uma estrutura com as seguintes chaves, que denota uma mensagem válida. Dos documentos `Phoenix.Socket.Message`.
 
 `topic` - O tópico ou tópico de string: namespace de par de subtópicos, por exemplo, "mensagens", "mensagens: 123";
+
 `event` - O nome do evento da string, por exemplo, "phx_join";
+
 `payload` - A carga útil da mensagem;
+
 `ref` - A referência única da string;
 
 **Tópicos**
