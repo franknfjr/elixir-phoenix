@@ -806,3 +806,13 @@ Observe que na função `filter` está sendo passado somente a função anônima
 1. Criar uma lista com 10 itens, aplicar imposto de 5% em cada um dos produtos, e depois filtramos somente os que têm valor superior a R$ 20,00. Por fim, somamos todos estes valores e mostramos o resultado na tela, tudo utilizando o que aprendemos junto com o pipe.
 
 obs.: os intens ficam dentro de maps %{produto: "descrição", valor: 0.0}
+
+Referências:
+
+Introduction - Elixir https://elixir-lang.org/getting-started/introduction.html
+
+Elixir School https://elixirschool.com/pt/
+
+Elixir: Do zero à concorrência https://www.amazon.com.br/Elixir-Do-zero-%C3%A0-concorr%C3%AAncia-ebook/dp/B06Y5SWJR8?tag=goog0ef-20&smid=A18CNA8NWQSYHH&ascsubtag=go_1366271959_58245915327_265589414315_pla-441178693417_c_
+
+Programming Elixir 1.3 https://www.amazon.com.br/Programming-Elixir-1-3-Dave-Thomas/dp/168050200X?tag=goog0ef-20&smid=A1ZZFT5FULY4LN&ascsubtag=go_1157433115_58530734048_257324212232_pla-301112824450_c_
