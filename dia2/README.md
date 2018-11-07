@@ -780,7 +780,154 @@ get "/teste", PageController, :teste
 
 Vamos iniciar nossa aplicação `mix phx.server` e acessar nossa nova rota.
 
+Agora, vamos definir a ação do controlador que especificamos na rota. Nós vamos adicionar uma `test/2` ação no `lib/hello_web/controllers/page_controller.ex` arquivo.
 
+```elixir
+defmodule AppWeb.PageController do
+  ...
+
+  def test(conn, _params) do
+    render conn, "test.html"
+  end
+end
+```
+
+Vamos criar uma função que nos informe qual controladora e ação estão manipulando nossa solicitação.
+
+Para fazer isso, precisamos importar as funções `action_name/1e controller_module/1` de `Phoenix.Controllerdentro lib/app_web.ex`.
+
+```elixir
+  def view do
+    quote do
+      use Phoenix.View, root: "lib/hello_web/templates",
+                        namespace: HelloWeb
+
+      # Import convenience functions from controllers
+      import Phoenix.Controller, only: [get_flash: 1, get_flash: 2, view_module: 1,
+                                        action_name: 1, controller_module: 1]
+
+      ...
+    end
+  end
+```
+
+Em seguida, vamos definir uma função `handler_info/1`  na parte inferior da `lib/hello_web/views/page_view.ex` qual faz uso das funções `controller_module/1` e `action_name/1` apenas importadas. Também vamos definir uma `connection_keys/1` função que usaremos em um momento.
+
+```elixir
+defmodule AppWeb.PageView do
+  use AppWeb, :view
+
+  def handler_info(conn) do
+    "Request Handled By: #{controller_module conn}.#{action_name conn}"
+  end
+
+  def connection_keys(conn) do
+    conn
+    |> Map.from_struct()
+    |> Map.keys()
+  end
+end
+```
+
+Nós temos uma rota. Criamos uma nova ação de controlador. Nós fizemos modificações na visualização principal do aplicativo. Agora tudo o que precisamos é de um novo modelo para exibir a string da qual obtemos `handler_info/1`. Vamos criar um novo em `lib/hello_web/templates/page/test.html.eex`.
+
+```elixir
+<div class="jumbotron">
+  <p><%= handler_info @conn %></p>
+</div>
+```
+Observe que `@conn` está disponível para nós no modelo através do `assigns` mapa.
+
+Agora vamos testar acesse `localhost:4000/teste`, veremos que nossa página é trazida para nós por `Elixir.HelloWeb.PageController.test`.
+
+Podemos definir funções em qualquer visão individual em `lib/hello_web/views`. As funções definidas em uma visão individual só estarão disponíveis para modelos que essa visão renderiza. Por exemplo, funções como as `handler_info` acima, só estarão disponíveis para modelos em `lib/hello_web/templates/page`.
+
+Até agora, exibimos apenas valores singulares em nossos modelos - strings aqui e inteiros em outros guias. Como nos aproximaríamos de exibir todos os elementos de uma lista?
+
+A resposta é que podemos usar as compreensões da lista do Elixir.
+
+Agora que temos uma função, visível para o nosso template, que retorna uma lista de chaves na `connstruct`, tudo o que precisamos fazer é modificar `lib/hello_web/templates/page/test.html.eex` um pouco o nosso template para exibi-las.
+
+Podemos adicionar um cabeçalho e uma compreensão de lista como essa.
+
+```elixir
+<div class="jumbotron">
+  <p><%= handler_info @conn %></p>
+
+  <h3>Keys for the conn Struct</h3>
+
+  <%= for key <- connection_keys @conn do %>
+    <p><%= key %></p>
+  <% end %>
+</div>
+```
+
+Usamos a lista de chaves retornadas pela função `connection_keys` como a lista de origem para iterar. Observe que precisamos do ``<%==>` em ambos.  um para a linha superior da compreensão da lista e o outro para exibir a chave. Sem eles, nada seria realmente exibido.
+
+Quando visitamos `localhost:4000/teste` novamente, vemos todas as teclas exibidas.
+
+## Channels
+
+Os canais são uma parte realmente do Phoenix que nos permite adicionar facilmente recursos em tempo real aos nossos aplicativos. Os canais são baseados em uma ideia simples, enviar e receber mensagens. Remetentes transmitem mensagens sobre tópicos. Os receptores inscrevem-se em tópicos para que possam receber essas mensagens. Remetentes e destinatários podem alternar funções no mesmo tópico a qualquer momento.
+
+A palavra "Canal" é uma forma abreviada de um sistema em camadas com vários componentes. Vamos dar uma rápida olhada neles agora para que possamos ver o quadro geral um pouco melhor.
+
+A Phoenix vem com um cliente JavaScript que está disponível ao gerar um novo projeto Phoenix. A documentação do módulo JavaScript está disponível em https://hexdocs.pm/phoenix/js/
+
+**Visão Geral**
+
+O que é necessário para a comunicação acontecer?
+
+* Se conectar a um soquete, usando um transporte (Websockets ou long polling);
+
+O Websocket une um ou mais canais unsando uma única conexão de rede. Um processo de servidor de canal é criado por cliente e por tópico. O manipulador de soquete apropriado inicializa um `%Phoenix.Socket` para o servidor do canal (possivelmente após a autenticação do cliente). O servidor do canal, em seguida, segure o `%Phoenix.Socket{}` e pode manter qualquer estado que ele precisa dentro dele `socket.assigns`.
+
+Depois que a conexão é estabelecida, as mensagens recebidas de um cliente são roteadas para o servidor de canais correto. Se transmite uma mensagem, essa mensagem vai primeiro para o PubSub local, que a envia para qualquer cliente conectado ao mesmo servidor e inscrito nesse tópico. O PubSub local também encaminha a mensagem para PubSubs remotos nos outros nós do cluster, que os enviam para seus próprios assinantes.
+
+**Manipuladores de Soquetes**
+
+É mantida uma conexão única para cada cliente e multiplexa seus soquetes de canal por essa única conexão. Os manipuladores de soquete, como `lib/hello_web/channels/user_socket.ex`, são módulos que autenticam e identificam uma conexão de soquete e permitem que você defina atribuições de soquete padrão para uso em todos os canais.
+
+**Rotas do Canal**
+
+As rotas são definidas nos manipularodes de soquete, Eles correspondem na sequência de tópicos e despacham solicitações correspondentes para o módulo do Canal. O caractere de estrela `*` atua como um correspondente de caractere curinga, portanto, na rota de exemplo a seguir, os pedidos `sample_topic:phoenix` e `sample_topic:elixir` os dois serão despachados para o SampleTopicChannel.
+
+```elixir
+channel "sample_topic:*", AppWeb.SampleTopicChannel
+```
+
+**Canais**
+
+Os canais são a abstração de nível mais alto para componentes de comunicação em tempo real em Phoenix.
+
+São semelhantes ao controladores, os mesmos manipulam eventos dos cliente. Os eventos do canal podem ir  em ambas as direções, entrada e saída. As conexões de canal também persistem além de um único ciclo de solicitação/resposta.
+
+Cada canal irá implementar uma ou mais cláusulas de cada uma destas quatro funções de retorno de chamada `join/3`, `terminate/2`, `handle_in/3`, e `handle_out/3`.
+
+**PubSub**
+
+Consiste no módulo `Phoenix.PubSub` e uma variedade de módulos para diferentes adaptadores e seus `GenServer`. Esses módulos contêm funções que são as porcas e parafusos da organização da comunicação do Canal, assinando tópicos, cancelando a inscrição de tópicos e transmitindo mensagens sobre um tópico.
+
+**Mensagens**
+
+O módulo `Phoenix.Socket.Message` define uma estrutura com as seguintes chaves, que denota uma mensagem válida. Dos documentos `Phoenix.Socket.Message`.
+
+`topic` - O tópico ou tópico de string: namespace de par de subtópicos, por exemplo, "mensagens", "mensagens: 123";
+`event` - O nome do evento da string, por exemplo, "phx_join";
+`payload` - A carga útil da mensagem;
+`ref` - A referência única da string;
+
+**Tópicos**
+
+Os tópicos são identificadores de string - nomes que as várias camadas usam para garantir que as mensagens sejam colocadas no lugar certo. Como vimos acima, os tópicos podem usar curingas. Isso permite uma convenção “topic: subtopic” útil. Geralmente, você compõe tópicos usando IDs de registro da sua camada de aplicativo, como "users:123".
+
+**Transportes**
+
+A camada de transporte é onde a pneu encontra a estrada. O módulo `Phoenix.Channel.Transport` manipula toda a mensagem que entra e sai de um canal.
+
+**Adaptadores de transporte**
+
+O mecanismo de transporte padrão é via WebSockets, que retornará ao LongPolling se WebSockets não estiverem disponíveis. Outros adaptadores de transporte são possíveis, e podemos escrever nossos próprios se seguirmos o contrato do adaptador. Por favor, veja `Phoenix.TransportsWebSocket` um exemplo.
 
 ## Ecto
 
