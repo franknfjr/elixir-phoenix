@@ -19,9 +19,9 @@ defmodule ChatWeb.UserSocket do
   #
   # See `Phoenix.Token` documentation for examples in
   # performing token verification on connect.
-  def connect(_params, socket) do
-    {:ok, socket}
-  end
+  # def connect(_params, socket) do
+  #   {:ok, socket}
+  # end
 
   @max_age 24 * 60 * 60 * 14
   def connect(%{"token" => token}, socket) do
