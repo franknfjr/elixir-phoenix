@@ -3,7 +3,7 @@
 
 // To use Phoenix channels, the first step is to import Socket
 // and connect at the socket path in "lib/web/endpoint.ex":
-import { Socket } from "phoenix";
+import { Socket, Presence } from "phoenix";
 
 let socket = new Socket("/socket", { params: { token: window.userToken } });
 
@@ -53,6 +53,8 @@ let socket = new Socket("/socket", { params: { token: window.userToken } });
 
 socket.connect();
 
+let presences = {};
+
 let channelRoomId = window.channelRoomId;
 if (channelRoomId) {
   // Now that you are connected, you can join channels with a topic:
@@ -71,6 +73,16 @@ if (channelRoomId) {
     renderMessage(message);
   });
 
+  channel.on("presence_state", state => {
+    presences = Presence.syncState(presences, state)
+    renderOnlineUsers(presences)
+  })
+  
+  channel.on("presence_diff", diff => {
+    presences = Presence.syncDiff(presences, diff)
+    renderOnlineUsers(presences)
+  })
+
   document.querySelector("#new-message").addEventListener("submit", e => {
     e.preventDefault();
     let messageInput = e.target.querySelector("#message-content");
@@ -87,5 +99,21 @@ const renderMessage = (message) => {
   `;
   document.querySelector("#messages").innerHTML += messageTemplate;
 };
+
+const renderOnlineUsers = (presences) => {
+  let onlineUsers = Presence.list(presences, (_id, {metas: [user]}) => {
+    return onlineUserTemplate(user);
+  }).join("")
+
+  document.querySelector("#online-users").innerHTML = onlineUsers;
+}
+
+const onlineUserTemplate = (user) => {
+  return `
+    <div id="online-user-${user.user_id}">
+      <strong class="text-secondary">${user.username}</strong>
+    </div>
+  `
+}
 
 export default socket;
