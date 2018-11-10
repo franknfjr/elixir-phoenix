@@ -3,12 +3,13 @@ defmodule Chat.Repo.Migrations.CreateRooms do
 
   def change do
     create table(:rooms) do
-      add :name, :string
+      add :name, :string, null: false, size: 25
       add :desc, :string
-      add :topic, :string
+      add :topic, :string, size: 100
 
       timestamps()
     end
 
+    create unique_index(:rooms, [:name])
   end
 end
