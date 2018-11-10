@@ -9,7 +9,7 @@ defmodule ChatWeb.RoomChannel do
 
   def handle_in("message:add", %{"message" => content}, socket) do
     room_id = socket.assigns[:room_id]
-    user = Repo.get(User, socket.assigns[:current_user_id])
+    user = Repo.get!(User, socket.assigns[:current_user_id])
     message = %{content: content, user: %{username: user.username}}
     broadcast!(socket, "room:#{room_id}:new_message", message)
     {:reply, :ok, socket}
