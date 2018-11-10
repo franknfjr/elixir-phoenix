@@ -2,12 +2,14 @@ defmodule Blog.Coherence.User do
   @moduledoc false
   use Ecto.Schema
   use Coherence.Schema
+ 
 
   
 
   schema "users" do
     field :name, :string
     field :email, :string
+    has_many :posts, Blog.Submit.Post
     coherence_schema()
 
     timestamps()

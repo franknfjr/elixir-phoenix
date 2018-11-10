@@ -42,7 +42,8 @@ defmodule Blog.Mixfile do
       {:gettext, "~> 0.11"},
       {:cowboy, "~> 1.0"},
       {:plug_cowboy, "~> 1.0"},
-      {:coherence, "~> 0.5.2"}    
+      {:coherence, "~> 0.5.2"},
+      {:policy_wonk, "~> 1.0.0-rc.0"}    
     ]
   end
 

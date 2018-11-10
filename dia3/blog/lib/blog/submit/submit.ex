@@ -7,6 +7,9 @@ defmodule Blog.Submit do
   alias Blog.Repo
 
   alias Blog.Submit.Post
+  alias Blog.Coherence.User
+
+
 
   @doc """
   Returns the list of posts.
@@ -18,7 +21,9 @@ defmodule Blog.Submit do
 
   """
   def list_posts do
-    Repo.all(Post)
+    query = from p in Post,
+          join: u in User, where: p.user_id == u.id
+    Repo.all(query)
   end
 
   @doc """
@@ -49,8 +54,9 @@ defmodule Blog.Submit do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_post(attrs \\ %{}) do
-    %Post{}
+  def create_post(post, attrs \\ %{}) do
+    post
+    |> Ecto.build_assoc(:posts)
     |> Post.changeset(attrs)
     |> Repo.insert()
   end

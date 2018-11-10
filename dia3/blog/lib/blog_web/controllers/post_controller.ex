@@ -4,7 +4,7 @@ defmodule BlogWeb.PostController do
   alias Blog.Submit
   alias Blog.Submit.Post
 
-  def index(conn, _params) do
+  def index(conn, _params) do    
     posts = Submit.list_posts()
     render(conn, "index.html", posts: posts)
   end
@@ -15,7 +15,7 @@ defmodule BlogWeb.PostController do
   end
 
   def create(conn, %{"post" => post_params}) do
-    case Submit.create_post(post_params) do
+    case Submit.create_post(conn.assigns.current_user,post_params) do
       {:ok, post} ->
         conn
         |> put_flash(:info, "Post created successfully.")

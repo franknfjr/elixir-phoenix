@@ -1,3 +1,6 @@
+<%= if Coherence.logged_in?(@conn) do %>
+  <%= link "New post", to: post_path(@conn, :new) %>
+<% end %>
 <div class="jumbotron">
   <h2><%= gettext "Welcome to %{name}!", name: "Phoenix" %></h2>
   <p class="lead">A productive web framework that<br />does not compromise speed and maintainability.</p>

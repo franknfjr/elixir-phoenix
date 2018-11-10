@@ -33,14 +33,15 @@ defmodule BlogWeb.Router do
   end
 
   scope "/", BlogWeb do
-    pipe_through :browser # Use the default browser stack
-    get "/", PageController, :index
-    resources "/posts", PostController   
+    pipe_through :browser # Use the default browser stack   
+    get "/", PageController, :index   
   end
 
   scope "/", BlogWeb do
     pipe_through :protected
-    # Add protected routes below
+    # Add protected routes below    
+    resources "/posts", PostController
+          
   end
 
   # Other scopes may use custom stacks.

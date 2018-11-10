@@ -17,6 +17,10 @@ config :blog, BlogWeb.Endpoint,
   pubsub: [name: Blog.PubSub,
            adapter: Phoenix.PubSub.PG2]
 
+#cinfiguração policy Wonk
+config :policy_wonk, PolicyWonk,
+  policies: BlogWeb.Policies
+
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",

@@ -16,11 +16,17 @@
       <header class="header">
         <nav role="navigation">
           <ul class="nav nav-pills pull-right">
-            <li><a href="http://www.phoenixframework.org/docs">Get Started</a></li>
+            <%= if Coherence.current_user(@conn) do %>
+              <%= if @conn.assigns[:remembered] do %>
+                <li style="color: red;">!!</li>
+              <% end %>
+            <% end %>     
+            <li><a href="/registrations/new">Sign up</a></li>
+            <li><a href="/sessions/new">Login</a></li>            
           </ul>
         </nav>
-        <span class="logo"></span>
-      </header>
+      <span class="logo"></span>       
+    </header>
 
       <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
       <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
