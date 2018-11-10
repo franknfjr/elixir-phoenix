@@ -1,7 +1,7 @@
 defmodule Chat.Conversation.Room do
   use Ecto.Schema
   import Ecto.Changeset
-
+  alias Chat.Conversation.Room
   schema "rooms" do
     field(:desc, :string)
     field(:name, :string)
@@ -11,9 +11,12 @@ defmodule Chat.Conversation.Room do
   end
 
   @doc false
-  def changeset(room, attrs) do
+  def changeset(%Room{} = room, attrs) do
     room
     |> cast(attrs, [:name, :desc, :topic])
-    |> validate_required([:name, :desc, :topic])
+    |> validate_required([:name, :desc])
+    |> unique_constraint(:name)
+    |> validate_length(:name, min: 3, max: 25)
+    |> validate_length(:topic, min: 5, max: 100)
   end
 end
