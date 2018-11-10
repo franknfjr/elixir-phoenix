@@ -9,3 +9,7 @@
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
+Blog.Repo.delete_all Blog.Coherence.User
+
+Blog.Coherence.User.changeset(%Blog.Coherence.User{}, %{name: "Gissandro Gama", email: "gissandrogama@gissandro.com", password: "123123", password_confirmation: "123123"})
+|> Blog.Repo.insert!
