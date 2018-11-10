@@ -2,8 +2,10 @@ defmodule ChatWeb.RoomChannel do
   use ChatWeb, :channel
   alias Chat.Repo
   alias Chat.Auth.User
+  alias ChatWeb.Presence
 
   def join("room:" <> room_id, _params, socket) do
+    send(self(), :after_join)
     {:ok, %{channel: "room:#{room_id}"}, assign(socket, :room_id, room_id)}
   end
 
@@ -13,5 +15,19 @@ defmodule ChatWeb.RoomChannel do
     message = %{content: content, user: %{username: user.username}}
     broadcast!(socket, "room:#{room_id}:new_message", message)
     {:reply, :ok, socket}
+  end
+
+  def handle_info(:after_join, socket) do
+    push(socket, "presence_state", Presence.list(socket))
+
+    user = Repo.get(User, socket.assigns[:current_user_id])
+
+    {:ok, _} =
+      Presence.track(socket, "user:#{user.id}", %{
+        user_id: user.id,
+        username: user.username
+      })
+
+    {:noreply, socket}
   end
 end
