@@ -2,9 +2,15 @@
   <div class="col-md-3">
     <h3>Rooms</h3>
     <ul class="list-group">
-      <%= for room <- @rooms do %>
-        <li class="list-group-item"><%= room.name %></li>
-      <% end %>
+      <div class="section-items">
+        <%= for room <- @rooms do %>
+          <div class="section-item">
+            <%= link to: room_path(@conn, :show, room.id) do %>
+              <span class="channel-icon">#</span>
+              <%= room.name %>
+            <% end %>
+        <% end %>
+      </div>
     </ul>
   </div>
   <div class="col-md-9">
