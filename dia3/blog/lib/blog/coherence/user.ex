@@ -1,9 +1,7 @@
 defmodule Blog.Coherence.User do
   @moduledoc false
   use Ecto.Schema
-  use Coherence.Schema
- 
-
+  use Coherence.Schema 
   
 
   schema "users" do

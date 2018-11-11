@@ -43,7 +43,7 @@ defmodule Blog.Mixfile do
       {:cowboy, "~> 1.0"},
       {:plug_cowboy, "~> 1.0"},
       {:coherence, "~> 0.5.2"},
-      {:policy_wonk, "~> 1.0.0-rc.0"}    
+      {:policy_wonk, "~> 0.2.0"}    
     ]
   end
 

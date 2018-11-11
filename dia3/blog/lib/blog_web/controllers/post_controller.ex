@@ -1,8 +1,12 @@
 defmodule BlogWeb.PostController do
   use BlogWeb, :controller
-
+  
   alias Blog.Submit
   alias Blog.Submit.Post
+  alias Blog.Coherence.User
+
+  plug PolicyWonk.LoadResource, [:post] when action in [:show, :edit, :update, :delete]
+  plug PolicyWonk.Enforce, :post_owner when action in [:show, :edit, :update, :delete]
 
   def index(conn, _params) do    
     posts = Submit.list_posts()
@@ -57,4 +61,27 @@ defmodule BlogWeb.PostController do
     |> put_flash(:info, "Post deleted successfully.")
     |> redirect(to: post_path(conn, :index))
   end
+
+  def policy(assigns, :post_owner) do
+    case {assigns[:current_user], assigns[:post]} do
+      {%Blog.Coherence.User{id: user_id}, post=%Blog.Submit.Post{}} ->
+        case post.user_id do
+          ^user_id -> :ok
+          _ -> :not_found
+        end
+      _ -> :not_found
+    end
+  end
+  
+  def policy_error(conn, :not_found) do
+    BlogWeb.ErrorHandlers.resource_not_found(conn, :not_found)
+  end
+  
+  def load_resource(_conn, :post, %{"id" => id}) do
+    case Submit.get_post!(id) do
+      nil -> :not_found
+      post -> {:ok, :post, post}
+    end
+  end
+    
 end

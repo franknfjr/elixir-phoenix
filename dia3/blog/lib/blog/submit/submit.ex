@@ -9,8 +9,6 @@ defmodule Blog.Submit do
   alias Blog.Submit.Post
   alias Blog.Coherence.User
 
-
-
   @doc """
   Returns the list of posts.
 

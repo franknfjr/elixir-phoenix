@@ -17,7 +17,7 @@ config :blog, BlogWeb.Endpoint,
   pubsub: [name: Blog.PubSub,
            adapter: Phoenix.PubSub.PG2]
 
-#cinfiguração policy Wonk
+#configuração policy Wonk
 config :policy_wonk, PolicyWonk,
   policies: BlogWeb.Policies
 
