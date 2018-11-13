@@ -517,7 +517,7 @@ iex> handle_open = fn
 
 Execute o IEx. Crie e execute as funções que fazem o seguinte:
 
-1. list_concat.([:1, :2], [:3, :4]) #=> [:1, :2, :3, :4]
+1. list_concat.([1, 2], [3, 4]) #=> [1, 2, 3, 4]
 2. sum.(4, 6, 8) #=> 18
 3. tupla_para_lista.( { 1357, 2468 } ) #=> [ 1357, 2468 ]
 
