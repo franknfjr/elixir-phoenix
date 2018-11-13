@@ -224,7 +224,7 @@ mix ecto.gen.migration add_user_id_to_posts
 ```
 
 ```elixir
-defmodule Login.Repo.Migrations.AddUserIdToPosts do
+defmodule Blog.Repo.Migrations.AddUserIdToPosts do
   use Ecto.Migration
 
   def change do
