@@ -2,13 +2,13 @@
 
 Neste tutorial iremos criar um sistema simples que realiza autenticação utilizando o Coherence e autorização com o Policy wonk, a aplicação final será um blog simples.
 
-* Gerar CRUD dos Post, cada post possui apenas o titulo e o corpo da mensagem.
+* Gerar CRUD dos Post, cada Post possui titulo e o corpo da mensagem.
 
 ```elixir
-mix phoenix.gen.html Submit Post posts title body:text
+mix phx.gen.html Submit Post posts title body:text
 ```
 
-* Adicionando as rotas, no arquivo _routes.ex_ adicionar, sem autenticação nenhuma primeiro
+* No arquivo _routes.ex_ adicionar o novo resources dos posts, sem autenticação nenhuma primeiro
 
 ```elixir
 scope "/", Blog do
@@ -28,16 +28,28 @@ mix ecto.migrate
 * Adicionar a autenticação com o Coherence para proteger as ações do Post, no arquivo _mix.exs_, adicionar `{:coherence, "~> 0.5.2"}` nos _deps_ e na _application_ adicionar o `:coherence`.
 
 ```elixir
-defp deps do
-  [
-    ...
-   {:coherence, "~> 0.5.2"}]
-end
+  def application do
+    [
+      mod: {Blog.Application, []},
+      extra_applications: [:coherence, :logger, :runtime_tools]
+    ]
+  end
 
-def application do
-  [mod: {Blog, []},
-   applications: [:coherence, ...]]
-end
+
+  defp deps do
+    [
+      {:phoenix, "~> 1.3.0"},
+      {:phoenix_pubsub, "~> 1.0"},
+      {:phoenix_ecto, "~> 3.2"},
+      {:postgrex, ">= 0.0.0"},
+      {:phoenix_html, "~> 2.10"},
+      {:phoenix_live_reload, "~> 1.0", only: :dev},
+      {:gettext, "~> 0.11"},
+      {:cowboy, "~> 1.0"},
+      {:plug_cowboy, "~> 1.0"},
+      {:coherence, "~> 0.5.2"}    
+    ]
+  end
 ```
 
 * Instalar as dependencias
@@ -45,6 +57,13 @@ end
 ```shell
 run mix deps.get
 ```
+
+* Executar o comando, para gerar os arquivos de configuração, views, controllers, ... do Coherence
+
+```shell
+mix coh.install --full-invitable
+```
+
 
 * Coherence pede para configurar as rotas, no arquivo _router.ex_ adicionar os seguintes comandos.
 
@@ -90,7 +109,9 @@ defmodule BlogWeb.Router do
 
   scope "/", BlogWeb do
     pipe_through :protected
-    # Add protected routes below    
+    # Add protected routes below 
+    # ADICIONAR AQUI NESSE SCOPE AS ROTAS
+    # QUE QUERERMOS PROTEGER
           
   end
 
@@ -99,16 +120,10 @@ defmodule BlogWeb.Router do
   #   pipe_through :api
   # end
 end
+
 ```
 
-* Executar o comando, para gerar os arquivos de configuração, views, controllers, ... do Coherence
-
-```shell
-mix coh.install --full-invitable
-```
-
-
-* O Coherence cria um usuário para o sistema, vamos adicionar alguns usuários para teste. No arquivo _priv/repo/seeds.exs_ adicionar:
+* O Coherence cria um usuário dummy para o sistema, entao vamos adicionar alguns usuários para teste. No arquivo _priv/repo/seeds.exs_ adicionar:
 
 ```elixir
 Blog.Repo.delete_all Blog.Coherence.User
@@ -131,7 +146,9 @@ mix ecto.setup
 ```elixir
   scope "/", BlogWeb do
     pipe_through :protected
-    # Add protected routes below    
+    # Add protected routes below
+    # ADICIONAR AQUI NESSE SCOPE AS ROTAS
+    # QUE QUERERMOS PROTEGER    
     resources "/posts", PostController
           
   end
@@ -157,7 +174,7 @@ mix ecto.setup
 ```
 
 
-* Testar o sistema. Logar no sistema e acessar _http://localhost:4000/posts_ só usuário logado pode realizar as operações de criação, visualização, edição e deletar os posts.
+* É hora de testar o sistema. Rode no terminal o comando `mix phx.server` e acesse _http://localhost:4000/posts_ somente um usuário logado terá acesso as ações dentro da aplicação.
 
 Um problema é que usuários podem editar, visualizar e deletar posts de outros usuários. Vamos tratar disso na autorização com Policy Wonk
 
@@ -194,7 +211,7 @@ config :policy_wonk, PolicyWonk,
   policies: Blog.Policies
 ```
 
-* Criar o arquivo _/lib/policy_wonk/policies.ex_ , porém vamos sobre-escrever essa policy no controller.
+* Criar o arquivo _/lib/blog_web/policies.ex_ , porém vamos sobre-escrever essa policy no controller.
 
 ```elixir
 defmodule Blog.Policies do
@@ -237,8 +254,7 @@ end
 
 * Associar no schema Post, no arquivo _web/models/post.ex_ editar:
 
-destaque: `belongs_to :user, Blog.Coherence.User` e  `def changeset(%Post{} = post, attrs) do
-    post
+destaque para as linhas: `belongs_to :user, Blog.Coherence.User` e  `post
     |> cast(attrs, [:title, :body, :user_id])`
 
 ```elixir
@@ -305,7 +321,7 @@ end
 * A relação entre as duas entidades foi estabelecida.
 
 
-* Criar o arquivo de erro `error_handlers.ex`
+* Criar o arquivo de erro `error_handlers.ex` na raiz da pasta _lib/blog_web_
 
 ```elixir
 defmodule BlogWeb.ErrorHandlers do
