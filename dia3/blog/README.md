@@ -329,3 +329,48 @@ defmodule BlogWeb.ErrorHandlers do
 
 end
 ```
+
+* Agora precisamos adicionar no contexto `Submit.ex` que iremos gerenciar um post do usuário.
+
+```elixir
+alias Blog.Submit.Post
+alias Blog.Coherence.User
+.
+.
+.
+
+def list_posts do
+    query = from p in Post,
+          join: u in User, where: p.user_id == u.id
+    Repo.all(query)
+end
+
+.
+.
+.
+
+def create_post(post, attrs \\ %{}) do
+    post
+    |> Ecto.build_assoc(:posts)
+    |> Post.changeset(attrs)
+    |> Repo.insert()
+end
+
+```
+
+* Após isso, adicionar os plugs no inicio do `post_controller.ex`
+```elixir
+efmodule BlogWeb.PostController do
+  use BlogWeb, :controller
+
+  alias Blog.Submit
+  alias Blog.Submit.Post
+  alias Blog.Coherence.User
+
+  plug PolicyWonk.LoadResource, [:post] when action in [:edit, :update, :delete]
+  plug PolicyWonk.Enforce, :post_owner when action in [:edit, :update, :delete]
+  .
+  .
+  .
+end
+```
