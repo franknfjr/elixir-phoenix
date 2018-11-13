@@ -372,5 +372,25 @@ efmodule BlogWeb.PostController do
   .
   .
   .
+  def policy(assigns, :post_owner) do
+    case {assigns[:current_user], assigns[:post]} do
+      {%Blog.Coherence.User{id: user_id}, post=%Blog.Submit.Post{}} ->
+        case post.user_id do
+          ^user_id -> :ok
+          _ -> :not_found
+        end
+      _ -> :not_found
+    end
+  end
+
+  def policy_error(conn, :not_found) do
+    BlogWeb.ErrorHandlers.resource_not_found(conn, :not_found)
+  end
+
+  def load_resource(_conn, :post, %{"id" => id}) do
+    case Submit.get_post!(id) do
+      nil -> :not_found
+      post -> {:ok, :post, post}
+   end
 end
 ```
