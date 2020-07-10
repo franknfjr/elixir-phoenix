@@ -53,3 +53,20 @@ Volte para o terminal
 $ ssh -T git@github.com
 $ Yes
 #Depois disso deve aparecer uma mensagem contendo o seu usuário do GitHub
+
+
+# PSQL
+
+sudo apt-get install postgresql postgresql-contrib
+sudo -i -u postgres psql
+
+ALTER USER postgres PASSWORD 'postgres';
+
+sudo -u postgres createuser --interactive
+
+/etc/postgresql/9.1/main/postgresql.conf
+trust
+
+# INOTIFY-TOOLS
+
+sudo apt-get install inotify-tools
