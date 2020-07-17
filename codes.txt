@@ -70,3 +70,77 @@ trust
 # INOTIFY-TOOLS
 
 sudo apt-get install inotify-tools
+
+
+# OUTRAS INSTALAÇÕES
+
+E: Não foi possível obter trava /var/lib/apt/lists/lock - open (11: Recurso temporariamente indisponível)
+E: Impossível criar acesso exclusivo ao directório /var/lib/apt/lists/
+E: Não foi possível obter trava /var/lib/dpkg/lock - open (11: Recurso temporariamente indisponível)
+E: Não foi possível obter acesso exclusivo ao directório de administração (/var/lib/dpkg/), outro processo está a utilizá-lo?
+
+ sudo rm /var/lib/apt/lists/lock 
+
+ sudo rm /var/lib/dpkg/lock
+
+ERLANG + ELIXIR
+
+wget https://packages.erlang-solutions.com/erlang-solutions_1.0_all.deb && sudo dpkg -i erlang-solutions_1.0_all.deb
+sudo apt-get update
+sudo apt-get install esl-erlang
+
+git clone https://github.com/elixir-lang/elixir.git
+cd elixir/
+git checkout v1.4
+make clean test
+sudo make install
+
+PHOENIX 1.2
+
+mix local.hex
+mix archive.install https://github.com/phoenixframework/archives/raw/master/phoenix_new.ez
+
+PHOENIX 1.3
+
+mix archive.install https://github.com/phoenixframework/archives/raw/master/phx_new.ez
+
+
+PGADMIN3
+
+sudo apt-get install pgadmin3
+
+
+JAVA
+
+baixar o tar.gz no site
+
+mkdir /usr/java
+
+
+sudo update-alternatives --install "/usr/bin/java" "java" "/usr/lib/java/jdk1.7.0_65/bin/java" 1
+
+sudo update-alternatives --install "/usr/bin/javac" "javac" "/usr/lib/java/jdk1.7.0_65/bin/javac" 1
+
+sudo update-alternatives --install "/usr/bin/javaws" "javaws" "/usr/lib/java/jdk1.7.0_65/bin/javaws" 1
+
+Update your ~/.bashrc file
+
+##add these
+
+export JAVA_HOME=/usr/lib/java/jdk1.8.0_77
+
+export PATH="$PATH:$JAVA_HOME/bin"
+
+https://stackoverflow.com/questions/2710499/android-sdk-on-a-64-bit-linux-machine/10473415#10473415
+
+sudo apt install make
+
+and then was prompted to install additional dependencies.
+
+** (Mix) Could not compile with "make" (exit status: 2).
+You need to have gcc and make installed. If you are using
+Ubuntu or any other Debian-based system, install the packages
+"build-essential". Also install "erlang-dev" package if not
+included in your Erlang/OTP version. If you're on Fedora, run
+"dnf group install 'Development Tools'".
+Once I did sudo apt install build-essential then everything works fin
